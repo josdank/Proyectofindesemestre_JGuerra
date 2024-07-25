@@ -1,4 +1,4 @@
 package miniMarket.interfaz;
 
-public class transaccion {
+public class facturacion {
 }

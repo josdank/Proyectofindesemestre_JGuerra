@@ -1,21 +1,20 @@
 import javax.swing.*;
-
-import  miniMarket.interfaz.admin.cajerosCreacion;
 import miniMarket.interfaz.login;
 
-
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 public class Main {
     public static void main(String[] args) {
-
-        System.out.println("Hola Mundo");
-        System.out.println("y si le pongo en el central se daña xd");
-        JFrame frame = new JFrame("Login");
+        JFrame frame = new JFrame("login    ");
         frame.setContentPane(new login().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-
+        // Cerrar la ventana de login
+        /*JFrame login_frame = (JFrame) SwingUtilities.getWindowAncestor(login);
+        login_frame.dispose();*/
     }
 }
