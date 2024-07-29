@@ -24,18 +24,6 @@ public class login extends JFrame {
     private JComboBox<String> comboBox1;
 
     public login() {
-        // Inicializar los componentes
-        mainPanel = new JPanel();
-        contrasenia = new JPasswordField(20);
-        usuario = new JTextField(20);
-        mostrarContraseñaRadioButton = new JRadioButton("Mostrar Contraseña");
-        loginButton = new JButton("Iniciar Sesión");
-        img = new JLabel();
-        img1 = new JLabel();
-        mensaje = new JLabel("Iniciar Sesión");
-        comboBox1 = new JComboBox<>(new String[]{"Cajero", "Admin"});
-
-        // Configuración de los iconos de las imágenes
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
         icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
         img.setIcon(icon);
@@ -43,28 +31,6 @@ public class login extends JFrame {
         icon = new ImageIcon("src/channels4_profile.jpg");
         icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
         img1.setIcon(icon);
-
-        // Añadir los componentes al panel principal
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(img);
-        mainPanel.add(img1);
-        mainPanel.add(mensaje);
-        mainPanel.add(new JLabel("Usuario:"));
-        mainPanel.add(usuario);
-        mainPanel.add(new JLabel("Contraseña:"));
-        mainPanel.add(contrasenia);
-        mainPanel.add(mostrarContraseñaRadioButton);
-        mainPanel.add(new JLabel("Rol:"));
-        mainPanel.add(comboBox1);
-        mainPanel.add(loginButton);
-
-        // Configuración del frame
-        setContentPane(mainPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
-
-        // Acción del botón de inicio de sesión
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,20 +51,12 @@ public class login extends JFrame {
                 }
             }
         });
-
-        // Acción del radio button para mostrar contraseña
-        mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (mostrarContraseñaRadioButton.isSelected()) {
-                    contrasenia.setEchoChar((char) 0);
-                } else {
-                    contrasenia.setEchoChar('•');
-                }
-            }
-        });
+        if (mostrarContraseñaRadioButton.isSelected()) {
+            contrasenia.setEchoChar((char) 0);
+        } else {
+            contrasenia.setEchoChar('•');
+        }
     }
-
     private Usuario authenticate(String username, String password, String role) {
         String query = "SELECT * FROM usuarios WHERE username = ? AND password = ? AND role = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -122,3 +80,4 @@ public class login extends JFrame {
         SwingUtilities.invokeLater(() -> new login().setVisible(true));
     }
 }
+
