@@ -31,6 +31,15 @@ public class stock extends JFrame {
     private JLabel vino;
     private JButton añadirStockButton;
     private JButton[] productButtons;
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private JButton button5;
+    private JButton button6;
+    private JButton button7;
+    private JButton button8;
+
 
     public stock() {
         // Configuración de la interfaz gráfica

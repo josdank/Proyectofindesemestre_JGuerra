@@ -250,7 +250,7 @@ public class transaccion extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Realizar la facturación
-                new facturacion((Usuario) cashier).setVisible(true);
+                new facturacion().setVisible(true);
                 dispose();
             }
         });

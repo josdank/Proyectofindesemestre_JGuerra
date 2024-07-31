@@ -1,17 +1,12 @@
 package miniMarket.interfaz;
 
-import miniMarket.DatabaseConnection;
 import miniMarket.Usuario;
-import miniMarket.Transaccion;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -19,6 +14,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class facturacion extends JFrame {
+    public JPanel mainPanel5;
     private JTextField usuario;
     private JLabel img1;
     private JLabel mensaje;
@@ -30,7 +26,7 @@ public class facturacion extends JFrame {
     private JTextField direccion;
     private Usuario cashier;
 
-    public facturacion(Usuario cashier) {
+    public facturacion() {
         this.cashier = cashier;
 
         // Configuración de la interfaz (JTextField, JLabel, JButton, etc.)
@@ -126,6 +122,6 @@ public class facturacion extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new facturacion(new Usuario("1", "cajero1", "password", "Cajero")).setVisible(true));
+        SwingUtilities.invokeLater(() -> new facturacion().setVisible(true));
     }
 }

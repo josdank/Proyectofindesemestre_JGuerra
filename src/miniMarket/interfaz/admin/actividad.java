@@ -2,8 +2,7 @@ package miniMarket.interfaz.admin;
 
 import miniMarket.DatabaseConnection;
 import miniMarket.interfaz.login;
-import miniMarket.interfaz.admin.ventas;
-import miniMarket.interfaz.admin.stock;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,23 +15,17 @@ public class actividad extends JFrame {
     public JPanel mainPanel;
     private JPasswordField contrasenia;
     private JTextField usuario;
-    private JRadioButton mostrarContraseñaRadioButton;
+    private JRadioButton mostrarContrasenia;
     private JButton seleccion;
     private JButton volverLogin;
     private JLabel img1;
     private JLabel img2;
     private JComboBox<String> comboBox1;
+    private JLabel nombre;
+    private JLabel Contrasena;
 
     public actividad() {
-        // Inicializar los componentes
-        mainPanel = new JPanel();
-        contrasenia = new JPasswordField(20);
-        usuario = new JTextField(20);
-        mostrarContraseñaRadioButton = new JRadioButton("Mostrar Contraseña");
-        seleccion = new JButton("Seleccionar");
-        volverLogin = new JButton("Volver al Login");
-        img1 = new JLabel();
-        img2 = new JLabel();
+        // Inicializar los componentes faltantes
         comboBox1 = new JComboBox<>(new String[]{"Crear Cajero", "Revisar Ventas", "Gestionar Stock"});
 
         // Configuración de los iconos de las imágenes
@@ -44,25 +37,11 @@ public class actividad extends JFrame {
         icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
         img2.setIcon(icon);
 
-        // Añadir componentes al panel principal
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(img1);
-        mainPanel.add(new JLabel("Usuario:"));
-        mainPanel.add(usuario);
-        mainPanel.add(new JLabel("Contraseña:"));
-        mainPanel.add(contrasenia);
-        mainPanel.add(mostrarContraseñaRadioButton);
-        mainPanel.add(new JLabel("Seleccione la actividad:"));
-        mainPanel.add(comboBox1);
-        mainPanel.add(seleccion);
-        mainPanel.add(volverLogin);
-        mainPanel.add(img2);
-
         // Mostrar u ocultar la contraseña
-        mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
+        mostrarContrasenia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (mostrarContraseñaRadioButton.isSelected()) {
+                if (mostrarContrasenia.isSelected()) {
                     contrasenia.setEchoChar((char) 0);
                 } else {
                     contrasenia.setEchoChar('*');
@@ -119,6 +98,12 @@ public class actividad extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+        comboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     // Método para validar las credenciales del administrador
