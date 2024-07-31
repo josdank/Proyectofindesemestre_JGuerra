@@ -89,6 +89,7 @@ public class stock extends JFrame {
         inicializarCantidades();
 
         // Aplica estilos
+        estilos.aplicarColorDeFondo(mainPanel2);
         estilos.aplicarEstilos(huevos);
         estilos.aplicarEstilos(leche);
         estilos.aplicarEstilos(fideos);
