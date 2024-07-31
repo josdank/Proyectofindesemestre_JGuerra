@@ -1,48 +1,31 @@
 package miniMarket;
 
-public class Usuario extends Entidad {
-    String nombreUsuario;
-    String contrasena;
-    int idRol;
+public class Usuario {
+    private String id;
+    private String username;
+    private String password;
+    private String role;
 
-    public Usuario() {
+    public Usuario(String id, String username, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
-    public Usuario(String nombreUsuario, String contrasena, int idRol) {
-        this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
-        this.idRol = idRol;
+    public String getId() {
+        return id;
     }
 
-    public Usuario(int id, String nombreUsuario, String contrasena, int idRol) {
-        super(id);
-        this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
-        this.idRol = idRol;
+    public String getUsername() {
+        return username;
     }
 
-    // Getters y Setters
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getPassword() {
+        return password;
     }
 
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public int getIdRol() {
-        return idRol;
-    }
-
-    public void setIdRol(int idRol) {
-        this.idRol = idRol;
+    public String getRole() {
+        return role;
     }
 }

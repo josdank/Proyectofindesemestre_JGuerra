@@ -1,11 +1,16 @@
 package miniMarket.interfaz;
-
-
+import miniMarket.DatabaseConnection;
+import miniMarket.Usuario;
+import miniMarket.interfaz.admin.actividad;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class login {
+public class login extends JFrame{
     public JPanel mainPanel;
     private JPasswordField contrasenia;
     private JTextField usuario;
@@ -29,29 +34,23 @@ public class login {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String Usuario = "Josueso";
-                String correoUsuario = "josue.guerra@epn.edu.ec";
-                String contraUsuario = "159687Js";
+                String username = usuario.getText();
+                String password = new String(contrasenia.getPassword());
+                String role = (String) comboBox1.getSelectedItem();
 
-                String inputUsuario = usuario.getText();
-                String inputContraseña = new String(contrasenia.getPassword());
-
-                if ((inputUsuario.equals(Usuario) || inputUsuario.equals(correoUsuario)) && inputContraseña.equals(contraUsuario)) {
-                    JFrame frame = new JFrame("Biografía");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
-
-                    // Cerrar la ventana de login
-                    JFrame login_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
-                    login_frame.dispose();
+                Usuario user = authenticate(username, password, role);
+                if (user != null) {
+                    if (user.getRole().equals("Cajero")) {
+                        new transaccion(user).setVisible(true);
+                    } else if (user.getRole().equals("Admin")) {
+                        new actividad().setVisible(true);
+                    }
+                    dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
+                    JOptionPane.showMessageDialog(login.this, "Credenciales incorrectas.");
                 }
             }
         });
-
         mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,7 +61,32 @@ public class login {
                 }
             }
         });
-
     }
+
+    private Usuario authenticate(String username, String password, String role) {
+        String query = "SELECT * FROM usuarios WHERE username = ? AND password = ? AND role = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, role);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Usuario(rs.getString("id"), rs.getString("username"), rs.getString("password"), rs.getString("role"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new login().setVisible(true));
+    }
+
+
 }
+
 

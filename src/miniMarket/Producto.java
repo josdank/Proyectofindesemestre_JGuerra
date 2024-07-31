@@ -1,63 +1,39 @@
 package miniMarket;
 
-public class Producto extends Entidad {
-    String nombre;
-    int stock;
-    double precio;
-    String rutaImagen;
+public class Producto {
+    private String id;
+    private String name;
+    private int stock;
+    private double price;
 
-    public Producto() {
-    }
-
-    public Producto(String nombre, int stock, double precio, String rutaImagen) {
-        this.nombre = nombre;
+    public Producto(String id, int stock, double price) {
+        this.id = id;
+        this.name = name;
         this.stock = stock;
-        this.precio = precio;
-        this.rutaImagen = rutaImagen;
+        this.price = price;
     }
 
-    public Producto(int id, String nombre, int stock, double precio, String rutaImagen) {
-        super(id);
-        this.nombre = nombre;
-        this.stock = stock;
-        this.precio = precio;
-        this.rutaImagen = rutaImagen;
+    public String getId() {
+        return id;
     }
 
-    public Producto(int id) {
-        super(id);
-    }
-
-    // Getters y Setters
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getName() {
+        return name;
     }
 
     public int getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public double getPrice() {
+        return price;
     }
 
-    public double getPrecio() {
-        return precio;
+    public void reduceStock(int quantity) {
+        this.stock -= quantity;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public String getRutaImagen() {
-        return rutaImagen;
-    }
-
-    public void setRutaImagen(String rutaImagen) {
-        this.rutaImagen = rutaImagen;
+    public void increaseStock(int quantity) {
+        this.stock += quantity;
     }
 }

@@ -1,43 +1,45 @@
 package miniMarket;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Transaccion {
-    int idTransaccion;
-    int idUsuario;
-    LocalDateTime fechaTransaccion;
+    private String id;
+    private Date date;
+    private Usuario cashier;
+    private Producto product;
+    private int quantity;
+    private double totalPrice;
 
-    public Transaccion() {
+    public Transaccion(String id, Date date, Usuario cashier, Producto product, int quantity, double totalPrice) {
+        this.id = id;
+        this.date = date;
+        this.cashier = cashier;
+        this.product = product;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
     }
 
-    public Transaccion(int idTransaccion, int idUsuario, LocalDateTime fechaTransaccion) {
-        this.idTransaccion = idTransaccion;
-        this.idUsuario = idUsuario;
-        this.fechaTransaccion = fechaTransaccion;
+    public String getId() {
+        return id;
     }
 
-    // Getters y Setters
-    public int getIdTransaccion() {
-        return idTransaccion;
+    public Date getDate() {
+        return date;
     }
 
-    public void setIdTransaccion(int idTransaccion) {
-        this.idTransaccion = idTransaccion;
+    public Usuario getCashier() {
+        return cashier;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Producto getProduct() {
+        return product;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public LocalDateTime getFechaTransaccion() {
-        return fechaTransaccion;
-    }
-
-    public void setFechaTransaccion(LocalDateTime fechaTransaccion) {
-        this.fechaTransaccion = fechaTransaccion;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 }

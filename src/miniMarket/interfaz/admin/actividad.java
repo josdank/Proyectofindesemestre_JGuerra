@@ -1,7 +1,9 @@
 package miniMarket.interfaz.admin;
 
-import miniMarket.interfaz.clases.DatabaseConnection;
-
+import miniMarket.DatabaseConnection;
+import miniMarket.interfaz.login;
+import miniMarket.interfaz.admin.ventas;
+import miniMarket.interfaz.admin.stock;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class actividad extends JFrame {
-    public JPanel mainPanel1;
+    public JPanel mainPanel;
     private JPasswordField contrasenia;
     private JTextField usuario;
     private JRadioButton mostrarContraseñaRadioButton;
@@ -23,7 +25,7 @@ public class actividad extends JFrame {
 
     public actividad() {
         // Inicializar los componentes
-        mainPanel1 = new JPanel();
+        mainPanel = new JPanel();
         contrasenia = new JPasswordField(20);
         usuario = new JTextField(20);
         mostrarContraseñaRadioButton = new JRadioButton("Mostrar Contraseña");
@@ -43,18 +45,18 @@ public class actividad extends JFrame {
         img2.setIcon(icon);
 
         // Añadir componentes al panel principal
-        mainPanel1.setLayout(new BoxLayout(mainPanel1, BoxLayout.Y_AXIS));
-        mainPanel1.add(img1);
-        mainPanel1.add(new JLabel("Usuario:"));
-        mainPanel1.add(usuario);
-        mainPanel1.add(new JLabel("Contraseña:"));
-        mainPanel1.add(contrasenia);
-        mainPanel1.add(mostrarContraseñaRadioButton);
-        mainPanel1.add(new JLabel("Seleccione la actividad:"));
-        mainPanel1.add(comboBox1);
-        mainPanel1.add(seleccion);
-        mainPanel1.add(volverLogin);
-        mainPanel1.add(img2);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(img1);
+        mainPanel.add(new JLabel("Usuario:"));
+        mainPanel.add(usuario);
+        mainPanel.add(new JLabel("Contraseña:"));
+        mainPanel.add(contrasenia);
+        mainPanel.add(mostrarContraseñaRadioButton);
+        mainPanel.add(new JLabel("Seleccione la actividad:"));
+        mainPanel.add(comboBox1);
+        mainPanel.add(seleccion);
+        mainPanel.add(volverLogin);
+        mainPanel.add(img2);
 
         // Mostrar u ocultar la contraseña
         mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
@@ -103,8 +105,17 @@ public class actividad extends JFrame {
             }
         });
 
+        // Acción del botón volver al login
+        volverLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new login().setVisible(true);
+                dispose();
+            }
+        });
+
         // Configuración de la ventana
-        setContentPane(mainPanel1);
+        setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
