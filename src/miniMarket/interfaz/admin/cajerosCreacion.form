@@ -104,7 +104,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="F"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="40477" class="javax.swing.JLabel">
