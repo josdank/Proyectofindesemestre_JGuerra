@@ -2,7 +2,6 @@ package miniMarket.interfaz;
 
 import miniMarket.DatabaseConnection;
 import miniMarket.Producto;
-import miniMarket.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.sql.SQLException;
 
 public class transaccion extends JFrame {
     private Object cashier = null;
-    public JPanel mainPanel2;
+    public JPanel mainPanel6;
     private JLabel huevos;
     private JLabel leche;
     private JLabel fideos;
@@ -36,7 +35,7 @@ public class transaccion extends JFrame {
     private JButton button8;
 
 
-    public transaccion(Usuario user) {
+    public transaccion() {
         this.cashier = cashier;
         ImageIcon icon = new ImageIcon("src/huevos.jpg");
         icon = new ImageIcon(icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
@@ -287,7 +286,7 @@ public class transaccion extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new transaccion(null).setVisible(true));
+        SwingUtilities.invokeLater(() -> new transaccion().setVisible(true));
     }
 }
 

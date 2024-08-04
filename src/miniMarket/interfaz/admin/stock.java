@@ -277,16 +277,16 @@ public class stock extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new stock().setVisible(true));
-    }
-
     public void setVisible(boolean b) {
-        JFrame frame = new JFrame("Stock");
+        JFrame frame = new JFrame("Crear Cajero");
         frame.setContentPane(mainPanel2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(b);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new stock().setVisible(true));
     }
 }

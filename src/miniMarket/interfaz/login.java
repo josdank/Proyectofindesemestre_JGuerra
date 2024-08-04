@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class login extends JFrame{
-    public JPanel mainPanel;
+    public JPanel mainPanel5;
     private JPasswordField contrasenia;
     private JTextField usuario;
     private JRadioButton mostrarContraseñaRadioButton;
@@ -41,7 +41,7 @@ public class login extends JFrame{
                 Usuario user = authenticate(username, password, role);
                 if (user != null) {
                     if (user.getRole().equals("Cajero")) {
-                        new transaccion(user).setVisible(true);
+                        new transaccion().setVisible(true);
                     } else if (user.getRole().equals("Admin")) {
                         new actividad().setVisible(true);
                     }

@@ -14,7 +14,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class facturacion extends JFrame {
-    public JPanel mainPanel5;
+    public JPanel mainPanel4;
     private JTextField usuario;
     private JLabel img1;
     private JLabel mensaje;

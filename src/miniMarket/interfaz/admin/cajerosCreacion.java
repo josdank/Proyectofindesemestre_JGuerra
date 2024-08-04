@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class cajerosCreacion extends JFrame {
     private JTextField ntelefono;
     private JTextField nombre;
-    public JPanel mainPanel6;
+    public JPanel mainPanel1;
     private JTextField usuario;
     private JPasswordField password;
     private JRadioButton mostrarContrasenia;
@@ -127,7 +127,7 @@ public class cajerosCreacion extends JFrame {
 
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Crear Cajero");
-        frame.setContentPane(mainPanel6);
+        frame.setContentPane(mainPanel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
