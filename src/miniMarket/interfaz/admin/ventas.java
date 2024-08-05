@@ -63,7 +63,7 @@ public class ventas extends JFrame {
             connection = DatabaseConnection.getConnection();
 
             // Buscar información del cajero
-            String cajeroQuery = "SELECT * FROM cajeros WHERE id = ?";
+            String cajeroQuery = "SELECT * FROM cajeros WHERE usuario = ?";
             cajeroStmt = connection.prepareStatement(cajeroQuery);
             cajeroStmt.setString(1, cajeroId);
             cajeroRs = cajeroStmt.executeQuery();

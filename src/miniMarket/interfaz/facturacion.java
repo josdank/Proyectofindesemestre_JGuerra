@@ -21,6 +21,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
 
+
 public class facturacion extends JFrame {
     public JPanel mainPanel4;
     private JTextField usuario;
@@ -104,15 +105,15 @@ public class facturacion extends JFrame {
     }
 
     private void enviarCorreo(String destinatario) {
-        String remitente = "jguerralovato@gmail.com";  // Reemplaza con tu correo electrónico
-        String clave = "swordart1234";  // Reemplaza con tu contraseña
+        String remitente = "tu_correo@gmail.com";
+        String clave = "tu_contraseña";
         String asunto = "Factura de compra";
         String mensaje = "Adjunto encontrará la factura de su compra.";
 
-        Properties props = System.getProperties();
+        Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.user", remitente);
-        props.put("mail.smtp.clave", clave);    // Reemplaza con tu contraseña
+        props.put("mail.smtp.clave", clave);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", "587");

@@ -162,7 +162,7 @@ public class stock extends JFrame {
         // Código para inicializar las cantidades desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String query = "SELECT * FROM productos";
+            String query = "SELECT * FROM stock";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 

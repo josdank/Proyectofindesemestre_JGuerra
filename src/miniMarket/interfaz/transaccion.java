@@ -1,7 +1,7 @@
 package miniMarket.interfaz;
 
 import miniMarket.interfaz.clases.DatabaseConnection;
-import miniMarket.interfaz.clases.Producto;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -42,14 +42,14 @@ public class transaccion extends JFrame {
     private JButton button14;
     private JButton button15;
     private JButton button16;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JTextField textField8;
+    private JLabel cantidad1;
+    private JLabel cantidad2;
+    private JLabel cantidad3;
+    private JLabel cantidad4;
+    private JLabel cantidad5;
+    private JLabel cantidad6;
+    private JLabel cantidad7;
+    private JLabel cantidad8;
 
     private int[] cantidades = new int[8];
     private Map<Integer, Integer> stock = new HashMap<>();
@@ -90,26 +90,27 @@ public class transaccion extends JFrame {
 
         // Inicializar el stock desde la base de datos
         inicializarStock();
+        inicializarCantidades();
 
         // Acciones de incremento
-        button1.addActionListener(e -> incrementarCantidad(0, textField1));
-        button2.addActionListener(e -> incrementarCantidad(1, textField2));
-        button3.addActionListener(e -> incrementarCantidad(2, textField3));
-        button4.addActionListener(e -> incrementarCantidad(3, textField4));
-        button5.addActionListener(e -> incrementarCantidad(4, textField5));
-        button6.addActionListener(e -> incrementarCantidad(5, textField6));
-        button7.addActionListener(e -> incrementarCantidad(6, textField7));
-        button8.addActionListener(e -> incrementarCantidad(7, textField8));
+        button1.addActionListener(e -> incrementarCantidad(0, cantidad1));
+        button2.addActionListener(e -> incrementarCantidad(1, cantidad2));
+        button3.addActionListener(e -> incrementarCantidad(2, cantidad3));
+        button4.addActionListener(e -> incrementarCantidad(3, cantidad4));
+        button5.addActionListener(e -> incrementarCantidad(4, cantidad5));
+        button6.addActionListener(e -> incrementarCantidad(5, cantidad6));
+        button7.addActionListener(e -> incrementarCantidad(6, cantidad7));
+        button8.addActionListener(e -> incrementarCantidad(7, cantidad8));
 
         // Acciones de decremento
-        button9.addActionListener(e -> decrementarCantidad(0, textField1));
-        button10.addActionListener(e -> decrementarCantidad(1, textField2));
-        button11.addActionListener(e -> decrementarCantidad(2, textField3));
-        button12.addActionListener(e -> decrementarCantidad(3, textField4));
-        button13.addActionListener(e -> decrementarCantidad(4, textField5));
-        button14.addActionListener(e -> decrementarCantidad(5, textField6));
-        button15.addActionListener(e -> decrementarCantidad(6, textField7));
-        button16.addActionListener(e -> decrementarCantidad(7, textField8));
+        button9.addActionListener(e -> decrementarCantidad(0, cantidad1));
+        button10.addActionListener(e -> decrementarCantidad(1, cantidad2));
+        button11.addActionListener(e -> decrementarCantidad(2, cantidad3));
+        button12.addActionListener(e -> decrementarCantidad(3, cantidad4));
+        button13.addActionListener(e -> decrementarCantidad(4, cantidad5));
+        button14.addActionListener(e -> decrementarCantidad(5, cantidad6));
+        button15.addActionListener(e -> decrementarCantidad(6, cantidad7));
+        button16.addActionListener(e -> decrementarCantidad(7, cantidad8));
 
         // Acción del botón enviarButton
         enviarButton.addActionListener(new ActionListener() {
@@ -134,9 +135,7 @@ public class transaccion extends JFrame {
         });
     }
 
-    public transaccion() {
-
-    }
+    public transaccion() {}
 
     private void inicializarStock() {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -154,21 +153,68 @@ public class transaccion extends JFrame {
         }
     }
 
+    private void inicializarCantidades() {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM productos";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
+            while (resultSet.next()) {
+                String nombre = resultSet.getString("nombre");
+                int cantidad = resultSet.getInt("cantidad");
+                switch (nombre.toLowerCase()) {
+                    case "huevos":
+                        cantidades[0] = cantidad;
+                        cantidad1.setText(String.valueOf(cantidades[0]));
+                        break;
+                    case "leche":
+                        cantidades[1] = cantidad;
+                        cantidad2.setText(String.valueOf(cantidades[1]));
+                        break;
+                    case "fideos":
+                        cantidades[2] = cantidad;
+                        cantidad3.setText(String.valueOf(cantidades[2]));
+                        break;
+                    case "azucar":
+                        cantidades[3] = cantidad;
+                        cantidad4.setText(String.valueOf(cantidades[3]));
+                        break;
+                    case "pan":
+                        cantidades[4] = cantidad;
+                        cantidad5.setText(String.valueOf(cantidades[4]));
+                        break;
+                    case "arroz":
+                        cantidades[5] = cantidad;
+                        cantidad6.setText(String.valueOf(cantidades[5]));
+                        break;
+                    case "embutidos":
+                        cantidades[6] = cantidad;
+                        cantidad7.setText(String.valueOf(cantidades[6]));
+                        break;
+                    case "vino":
+                        cantidades[7] = cantidad;
+                        cantidad8.setText(String.valueOf(cantidades[7]));
+                        break;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-    private void incrementarCantidad(int index, JTextField textField) {
+    private void incrementarCantidad(int index, JLabel cantidadLabel) {
         if (cantidades[index] < stock.get(index)) {
             cantidades[index]++;
-            textField.setText(String.valueOf(cantidades[index]));
+            cantidadLabel.setText(String.valueOf(cantidades[index]));
         } else {
             JOptionPane.showMessageDialog(this, "Lo sentimos, se agotó el stock de este producto.");
         }
     }
 
-    private void decrementarCantidad(int index, JTextField textField) {
+    private void decrementarCantidad(int index, JLabel cantidadLabel) {
         if (cantidades[index] > 0) {
             cantidades[index]--;
-            textField.setText(String.valueOf(cantidades[index]));
+            cantidadLabel.setText(String.valueOf(cantidades[index]));
         }
     }
 
@@ -240,7 +286,7 @@ public class transaccion extends JFrame {
         JFrame frame = new JFrame("Transacción");
         frame.setContentPane(mainPanel6);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setSize(800, 600);  // Establecer un tamaño de ventana para que toda la información sea visible
         frame.setLocationRelativeTo(null);
         frame.setVisible(b);
     }

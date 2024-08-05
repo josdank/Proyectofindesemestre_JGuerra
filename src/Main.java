@@ -1,12 +1,14 @@
 import javax.swing.*;
 
+import miniMarket.interfaz.admin.actividad;
+import miniMarket.interfaz.login;
 import miniMarket.interfaz.transaccion;
 
 public class Main {
     public static void main(String[] args) {
         // Crear la ventana de login
         JFrame loginFrame = new JFrame("Login");
-        loginFrame.setContentPane(new transaccion().mainPanel6);
+        loginFrame.setContentPane(new login().mainPanel5);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.pack();
         loginFrame.setLocationRelativeTo(null);

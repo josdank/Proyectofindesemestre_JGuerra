@@ -62,7 +62,7 @@ public class cajerosCreacion extends JFrame {
                 if (ntelefono.getText().isEmpty() || nombre.getText().isEmpty() || usuario.getText().isEmpty() || password.getPassword().length == 0) {
                     JOptionPane.showMessageDialog(cajerosCreacion.this, "Todos los campos deben estar llenos.", "Error", JOptionPane.ERROR_MESSAGE);
                     highlightEmptyFields();
-                } else if (ntelefono.getText().length() != 10) {
+                } else if (ntelefono.getText().length() != 16) {
                     JOptionPane.showMessageDialog(cajerosCreacion.this, "El número de teléfono debe tener 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
                     ntelefono.setBorder(BorderFactory.createLineBorder(Color.RED));
                 } else if (!nombreCompletoEsValido(nombre.getText())) {
@@ -73,7 +73,7 @@ public class cajerosCreacion extends JFrame {
                     try {
                         crearCajeroEnBaseDeDatos(nombre.getText(), usuario.getText(), new String(password.getPassword()), ntelefono.getText());
                         // Enviar mensaje de WhatsApp
-                        enviarMensajeWhatsApp(ntelefono.getText(), "Su usuario, cajero ha sido creado correctamente, estas son sus credenciales para su acceso");
+                        enviarMensajeWhatsApp(ntelefono.getText(), "Su usuario, cajero ha sido creado correctamente, estas son sus credenciales para su acceso\\nUsuario:" + usuario +"\\nContraseña:" + password);
                         JOptionPane.showMessageDialog(cajerosCreacion.this, "Cajero creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(cajerosCreacion.this, "Error al crear el cajero en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -127,13 +127,23 @@ public class cajerosCreacion extends JFrame {
     }
 
     private void enviarMensajeWhatsApp(String telefono, String mensaje) {
-        String url = "https://wa.me/593964030442" + telefono + "?text=" + mensaje.replace(" ", "%20");
+        // Remover todos los caracteres no numéricos del número de teléfono
+        telefono = telefono.replaceAll("[^\\d]", "");
+
+        // Asegurarse de que el número de teléfono no tenga el 0 inicial y que comience con el código de país
+        if (telefono.startsWith("0")) {
+            telefono = telefono.substring(1); // Elimina el 0 inicial
+        }
+        String numeroCompleto = "+593" + telefono;
+
+        String url = "https://wa.me/" + "?text=" + mensaje.replace(" ", "%20");
         try {
             Desktop.getDesktop().browse(new URL(url).toURI());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
+
 
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Crear Cajero");
