@@ -1,17 +1,25 @@
 package miniMarket.interfaz;
 
+import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.interfaz.clases.Usuario;
-
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Properties;
+import java.util.UUID;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 
 public class facturacion extends JFrame {
     public JPanel mainPanel4;
@@ -24,104 +32,142 @@ public class facturacion extends JFrame {
     private JTextField pago;
     private JTextField fecha;
     private JTextField direccion;
+    private JComboBox<String> comboBox1;
+    private JLabel img2;
     private Usuario cashier;
 
-    public facturacion() {
+    public facturacion(Usuario cashier) {
         this.cashier = cashier;
 
-        // Configuración de la interfaz (JTextField, JLabel, JButton, etc.)
-        usuario = new JTextField(20);
-        img1 = new JLabel();
-        mensaje = new JLabel("Generar Nota de Venta");
-        notaVenta = new JButton("Generar Nota de Venta");
-        cedula = new JTextField(20);
-        correo = new JTextField(20);
-        pago = new JTextField(20);
-        fecha = new JTextField(20);
-        direccion = new JTextField(20);
-
-        // Configuración de los iconos de las imágenes
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(80, 80, java.awt.Image.SCALE_SMOOTH));
+        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
         img1.setIcon(icon);
 
-        // Añadir los componentes a la ventana
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        add(img1);
-        add(mensaje);
-        add(new JLabel("Usuario:"));
-        add(usuario);
-        add(new JLabel("Cédula:"));
-        add(cedula);
-        add(new JLabel("Correo:"));
-        add(correo);
-        add(new JLabel("Método de Pago:"));
-        add(pago);
-        add(new JLabel("Fecha:"));
-        add(fecha);
-        add(new JLabel("Dirección:"));
-        add(direccion);
-        add(notaVenta);
+        ImageIcon imageIcon = new ImageIcon("src/channels4_profile.jpg");
+        icon = new ImageIcon(imageIcon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
+        img2.setIcon(icon);
 
-        // Configuración del botón de generar nota de venta
+        // Configuración del botón notaVenta
         notaVenta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = usuario.getText();
-                String id = cedula.getText();
-                String email = correo.getText();
-                String address = direccion.getText();
-                String paymentMethod = pago.getText();
-                String date = fecha.getText();
-
-                double total = calculateTotal(paymentMethod);
-                String invoiceDetails = generateInvoice(name, id, email, address, paymentMethod, total);
-                saveInvoice(invoiceDetails);
-                JOptionPane.showMessageDialog(facturacion.this, "Nota de venta generada.");
+                if (validarCampos()) {
+                    try {
+                        double total = Double.parseDouble(pago.getText());
+                        String metodoPago = (String) comboBox1.getSelectedItem();
+                        if (metodoPago.equals("Tarjeta")) {
+                            total *= 1.10; // Añadir 10% al total
+                        }
+                        generarPDF(total);
+                        enviarCorreo(correo.getText());
+                        guardarEnBaseDeDatos();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(facturacion.this, "Complete todos los campos para la facturación.");
+                }
             }
         });
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
     }
 
-    private double calculateTotal(String paymentMethod) {
-        double total = 0.0;
-        // Calcular el total de la transacción actual
-        // ...
-        if (paymentMethod.equalsIgnoreCase("tarjeta")) {
-            total *= 1.10; // 10% extra por pago con tarjeta
+    private boolean validarCampos() {
+        if (usuario.getText().isEmpty() || cedula.getText().isEmpty() || correo.getText().isEmpty() ||
+                pago.getText().isEmpty() || fecha.getText().isEmpty() || direccion.getText().isEmpty()) {
+            return false;
         }
-        return total;
+        if (!cedula.getText().matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "La cédula debe tener 10 dígitos.");
+            return false;
+        }
+        if (!correo.getText().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            JOptionPane.showMessageDialog(this, "El correo electrónico no tiene un formato válido.");
+            return false;
+        }
+        return true;
     }
 
-    private String generateInvoice(String name, String id, String email, String address, String paymentMethod, double total) {
-        StringBuilder invoice = new StringBuilder();
-        invoice.append("Nombre: ").append(name).append("\n");
-        invoice.append("Cédula: ").append(id).append("\n");
-        invoice.append("Email: ").append(email).append("\n");
-        invoice.append("Dirección: ").append(address).append("\n");
-        invoice.append("Método de Pago: ").append(paymentMethod).append("\n");
-        invoice.append("Total: ").append(total).append("\n");
-        invoice.append("Cajero: ").append(cashier.getUsername()).append("\n");
-        return invoice.toString();
-    }
-
-    private void saveInvoice(String invoiceDetails) {
+    private void generarPDF(double total) throws DocumentException, IOException {
         Document document = new Document();
+        String fileName = "Factura_" + UUID.randomUUID() + ".pdf";
+        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        document.open();
+        document.add(new Paragraph("Pedido"));
+        document.add(new Paragraph("Fecha: " + fecha.getText()));
+        document.add(new Paragraph("Nombre: " + usuario.getText()));
+        document.add(new Paragraph("Dirección: " + direccion.getText()));
+        document.add(new Paragraph("Cédula: " + cedula.getText()));
+        document.add(new Paragraph("Correo: " + correo.getText()));
+        document.add(new Paragraph("Descripción: Compra de productos"));
+        document.add(new Paragraph("Total: " + total));
+        document.close();
+    }
+
+    private void enviarCorreo(String destinatario) {
+        String remitente = "jguerralovato@gmail.com";  // Reemplaza con tu correo electrónico
+        String clave = "swordart1234";  // Reemplaza con tu contraseña
+        String asunto = "Factura de compra";
+        String mensaje = "Adjunto encontrará la factura de su compra.";
+
+        Properties props = System.getProperties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.user", remitente);
+        props.put("mail.smtp.clave", clave);    // Reemplaza con tu contraseña
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
         try {
-            PdfWriter.getInstance(document, new FileOutputStream("nota_de_venta.pdf"));
-            document.open();
-            document.add(new Paragraph(invoiceDetails));
-        } catch (DocumentException | IOException e) {
+            message.setFrom(new InternetAddress(remitente));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+            message.setSubject(asunto);
+            BodyPart texto = new MimeBodyPart();
+            texto.setText(mensaje);
+            BodyPart adjunto = new MimeBodyPart();
+            adjunto.setDataHandler(new DataHandler(new FileDataSource("Factura.pdf")));
+            adjunto.setFileName("Factura.pdf");
+            MimeMultipart multiParte = new MimeMultipart();
+            multiParte.addBodyPart(texto);
+            multiParte.addBodyPart(adjunto);
+            message.setContent(multiParte);
+            Transport transport = session.getTransport("smtp");
+            transport.connect("smtp.gmail.com", remitente, clave);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+        } catch (MessagingException me) {
+            me.printStackTrace();
+        }
+    }
+
+    private void guardarEnBaseDeDatos() {
+        String query = "INSERT INTO facturas (usuario, cedula, correo, pago, fecha, direccion, metodo_pago) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, usuario.getText());
+            stmt.setString(2, cedula.getText());
+            stmt.setString(3, correo.getText());
+            stmt.setString(4, pago.getText());
+            stmt.setString(5, fecha.getText());
+            stmt.setString(6, direccion.getText());
+            stmt.setString(7, (String) comboBox1.getSelectedItem());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            document.close();
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new facturacion().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            facturacion frame = new facturacion(new Usuario("cajero1", "Cajero 1", "1234", "Cajero"));
+            frame.setContentPane(frame.mainPanel4);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
     }
 }
