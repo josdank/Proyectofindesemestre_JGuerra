@@ -1,6 +1,6 @@
 package miniMarket.interfaz;
 
-import miniMarket.Usuario;
+import miniMarket.interfaz.clases.Usuario;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

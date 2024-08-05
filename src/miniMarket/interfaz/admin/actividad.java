@@ -1,6 +1,6 @@
 package miniMarket.interfaz.admin;
 
-import miniMarket.DatabaseConnection;
+import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.interfaz.login;
 
 import javax.swing.*;

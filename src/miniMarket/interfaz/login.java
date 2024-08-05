@@ -1,7 +1,9 @@
 package miniMarket.interfaz;
-import miniMarket.DatabaseConnection;
-import miniMarket.Usuario;
+
+import miniMarket.interfaz.clases.DatabaseConnection;
+import miniMarket.interfaz.clases.Usuario;
 import miniMarket.interfaz.admin.actividad;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,16 +12,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class login extends JFrame{
+public class login extends JFrame {
     public JPanel mainPanel5;
-    private JPasswordField contrasenia;
+    private JPasswordField contra;
     private JTextField usuario;
     private JRadioButton mostrarContraseñaRadioButton;
     private JButton loginButton;
     private JLabel img1;
     private JLabel img2;
     private JLabel mensaje;
-    private JComboBox comboBox1;
+    private JComboBox<String> comboBox1;
 
     public login() {
 
@@ -35,7 +37,7 @@ public class login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = usuario.getText();
-                String password = new String(contrasenia.getPassword());
+                String password = new String(contra.getPassword());
                 String role = (String) comboBox1.getSelectedItem();
 
                 Usuario user = authenticate(username, password, role);
@@ -51,16 +53,18 @@ public class login extends JFrame{
                 }
             }
         });
+
         mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (mostrarContraseñaRadioButton.isSelected()) {
-                    contrasenia.setEchoChar((char) 0);
+                    contra.setEchoChar((char) 0);
                 } else {
-                    contrasenia.setEchoChar('•');
+                    contra.setEchoChar('•');
                 }
             }
         });
+
     }
 
     private Usuario authenticate(String username, String password, String role) {
@@ -83,10 +87,13 @@ public class login extends JFrame{
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new login().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            login loginFrame = new login();
+            loginFrame.setContentPane(loginFrame.mainPanel5);
+            loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            loginFrame.pack();
+            loginFrame.setLocationRelativeTo(null);
+            loginFrame.setVisible(true);
+        });
     }
-
-
 }
-
-

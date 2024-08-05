@@ -1,6 +1,7 @@
 package miniMarket.interfaz.admin;
 
-import miniMarket.DatabaseConnection;
+import miniMarket.interfaz.clases.DatabaseConnection;
+import miniMarket.estilos.estilos;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -25,6 +26,15 @@ public class cajerosCreacion extends JFrame {
     private JButton crearCajeroButton;
 
     public cajerosCreacion() {
+        estilos.aplicarColorDeFondo(mainPanel1);
+        estilos.aplicarEstilos1(nombre);
+        estilos.aplicarEstilos1(usuario);
+        estilos.aplicarEstilos1(password);
+        estilos.aplicarEstilos2(volverButton);
+        estilos.aplicarEstilos2(crearCajeroButton);
+        estilos.aplicarEstilos3(mostrarContrasenia);
+
+
         mostrarContrasenia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

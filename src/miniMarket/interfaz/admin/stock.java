@@ -1,6 +1,6 @@
 package miniMarket.interfaz.admin;
 
-import miniMarket.DatabaseConnection;
+import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.estilos.estilos;
 
 import javax.swing.*;
@@ -98,6 +98,9 @@ public class stock extends JFrame {
         estilos.aplicarEstilos(arroz);
         estilos.aplicarEstilos(embutidos);
         estilos.aplicarEstilos(vino);
+        estilos.aplicarEstilos2(productos);
+        estilos.aplicarEstilos2(añadirStockButton);
+
 
 
         // Acciones de incremento

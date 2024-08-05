@@ -1,7 +1,7 @@
 package miniMarket.interfaz;
 
-import miniMarket.DatabaseConnection;
-import miniMarket.Producto;
+import miniMarket.interfaz.clases.DatabaseConnection;
+import miniMarket.interfaz.clases.Producto;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +33,22 @@ public class transaccion extends JFrame {
     private JButton button6;
     private JButton button7;
     private JButton button8;
+    private JButton button9;
+    private JButton button10;
+    private JButton button11;
+    private JButton button12;
+    private JButton button13;
+    private JButton button14;
+    private JButton button15;
+    private JButton button16;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
+    private JTextField textField5;
+    private JTextField textField6;
+    private JTextField textField7;
+    private JTextField textField8;
 
 
     public transaccion() {
