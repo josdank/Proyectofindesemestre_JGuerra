@@ -7,6 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,37 +59,14 @@ public class stock extends JFrame {
 
     public stock() {
         // Configuración de imágenes
-        ImageIcon icon = new ImageIcon("src/huevos.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        huevos.setIcon(icon);
-
-        icon = new ImageIcon("src/leche.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        leche.setIcon(icon);
-
-        icon = new ImageIcon("src/fideos.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        fideos.setIcon(icon);
-
-        icon = new ImageIcon("src/azucar.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        azucar.setIcon(icon);
-
-        icon = new ImageIcon("src/pan.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        pan.setIcon(icon);
-
-        icon = new ImageIcon("src/arroz.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        arroz.setIcon(icon);
-
-        icon = new ImageIcon("src/embutidos.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        embutidos.setIcon(icon);
-
-        icon = new ImageIcon("src/vino.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        vino.setIcon(icon);
+        setLabelImage(huevos, "src/huevos.jpg");
+        setLabelImage(leche, "src/leche.jpg");
+        setLabelImage(fideos, "src/fideos.jpg");
+        setLabelImage(azucar, "src/azucar.jpg");
+        setLabelImage(pan, "src/pan.jpg");
+        setLabelImage(arroz, "src/arroz.jpg");
+        setLabelImage(embutidos, "src/embutidos.jpg");
+        setLabelImage(vino, "src/vino.jpg");
 
         inicializarCantidades();
 
@@ -100,8 +82,6 @@ public class stock extends JFrame {
         estilos.aplicarEstilos(vino);
         estilos.aplicarEstilos2(productos);
         estilos.aplicarEstilos2(añadirStockButton);
-
-
 
         // Acciones de incremento
         button1.addActionListener(e -> incrementarCantidad(0, cantidad1));
@@ -146,6 +126,12 @@ public class stock extends JFrame {
         });
     }
 
+    private void setLabelImage(JLabel label, String imagePath) {
+        ImageIcon icon = new ImageIcon(imagePath);
+        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
+        label.setIcon(icon);
+    }
+
     private void incrementarCantidad(int index, JLabel cantidadLabel) {
         cantidades[index]++;
         cantidadLabel.setText(String.valueOf(cantidades[index]));
@@ -159,10 +145,9 @@ public class stock extends JFrame {
     }
 
     private void inicializarCantidades() {
-        // Código para inicializar las cantidades desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String query = "SELECT * FROM stock";
+            String query = "SELECT * FROM productos";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -172,35 +157,35 @@ public class stock extends JFrame {
                 switch (nombre.toLowerCase()) {
                     case "huevos":
                         cantidades[0] = cantidad;
-                        cantidad1.setText(String.valueOf(cantidad));
+                        cantidad1.setText(String.valueOf(cantidades[0]));
                         break;
                     case "leche":
                         cantidades[1] = cantidad;
-                        cantidad2.setText(String.valueOf(cantidad));
+                        cantidad2.setText(String.valueOf(cantidades[1]));
                         break;
                     case "fideos":
                         cantidades[2] = cantidad;
-                        cantidad3.setText(String.valueOf(cantidad));
+                        cantidad3.setText(String.valueOf(cantidades[2]));
                         break;
                     case "azucar":
                         cantidades[3] = cantidad;
-                        cantidad4.setText(String.valueOf(cantidad));
+                        cantidad4.setText(String.valueOf(cantidades[3]));
                         break;
                     case "pan":
                         cantidades[4] = cantidad;
-                        cantidad5.setText(String.valueOf(cantidad));
+                        cantidad5.setText(String.valueOf(cantidades[4]));
                         break;
                     case "arroz":
                         cantidades[5] = cantidad;
-                        cantidad6.setText(String.valueOf(cantidad));
+                        cantidad6.setText(String.valueOf(cantidades[5]));
                         break;
                     case "embutidos":
                         cantidades[6] = cantidad;
-                        cantidad7.setText(String.valueOf(cantidad));
+                        cantidad7.setText(String.valueOf(cantidades[6]));
                         break;
                     case "vino":
                         cantidades[7] = cantidad;
-                        cantidad8.setText(String.valueOf(cantidad));
+                        cantidad8.setText(String.valueOf(cantidades[7]));
                         break;
                 }
             }
@@ -211,7 +196,7 @@ public class stock extends JFrame {
 
     private void actualizarStockEnBaseDeDatos() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
-        String query = "UPDATE productos SET cantidad = ? WHERE nombre = ?";
+        String query = "UPDATE stock SET cantidad = ? WHERE nombre = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             for (int i = 0; i < 8; i++) {
@@ -262,6 +247,16 @@ public class stock extends JFrame {
             String precio = precioField.getText();
             String imagenPath = fileChooser.getSelectedFile().getAbsolutePath();
 
+            // Copiar la imagen seleccionada a la carpeta src/images del proyecto
+            try {
+                Path source = fileChooser.getSelectedFile().toPath();
+                Path destination = Paths.get("src/" + fileChooser.getSelectedFile().getName());
+                Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+                imagenPath = destination.toString();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
             // Guardar nuevo producto en la base de datos
             try {
                 Connection connection = DatabaseConnection.getConnection();
@@ -272,6 +267,12 @@ public class stock extends JFrame {
                 preparedStatement.setString(3, imagenPath);
                 preparedStatement.executeUpdate();
 
+                // Insertar en la tabla stock
+                String stockQuery = "INSERT INTO stock (nombre, cantidad) VALUES (?, 0)";
+                PreparedStatement stockStatement = connection.prepareStatement(stockQuery);
+                stockStatement.setString(1, nombre);
+                stockStatement.executeUpdate();
+
                 JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Error al agregar el producto en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -281,7 +282,7 @@ public class stock extends JFrame {
     }
 
     public void setVisible(boolean b) {
-        JFrame frame = new JFrame("Crear Cajero");
+        JFrame frame = new JFrame("Stock");
         frame.setContentPane(mainPanel2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
