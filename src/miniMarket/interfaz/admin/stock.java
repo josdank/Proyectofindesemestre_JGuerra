@@ -196,14 +196,55 @@ public class stock extends JFrame {
 
     private void actualizarStockEnBaseDeDatos() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
-        String query = "UPDATE stock SET cantidad = ? WHERE nombre = ?";
+        String querySelect = "SELECT cantidad, precio FROM stock WHERE nombre = ?";
+        String queryUpdate = "UPDATE stock SET cantidad = ?, precio = ? WHERE nombre = ?";
+        String queryInsert = "INSERT INTO stock (nombre, cantidad, precio) VALUES (?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement selectStmt = connection.prepareStatement(querySelect);
+             PreparedStatement updateStmt = connection.prepareStatement(queryUpdate);
+             PreparedStatement insertStmt = connection.prepareStatement(queryInsert)) {
             for (int i = 0; i < 8; i++) {
-                preparedStatement.setInt(1, cantidades[i]);
-                preparedStatement.setString(2, getNombreProducto(i));
-                preparedStatement.executeUpdate();
+                selectStmt.setString(1, getNombreProducto(i));
+                ResultSet resultSet = selectStmt.executeQuery();
+                if (resultSet.next()) {
+                    int cantidadActual = resultSet.getInt("cantidad");
+                    double precioActual = resultSet.getDouble("precio");
+                    int nuevaCantidad = cantidadActual + cantidades[i];
+
+                    updateStmt.setInt(1, nuevaCantidad);
+                    updateStmt.setDouble(2, precioActual);
+                    updateStmt.setString(3, getNombreProducto(i));
+                    updateStmt.executeUpdate();
+                } else {
+                    insertStmt.setString(1, getNombreProducto(i));
+                    insertStmt.setInt(2, cantidades[i]);
+                    insertStmt.setDouble(3, obtenerPrecioProducto(i)); // Obtener el precio del producto
+                    insertStmt.executeUpdate();
+                }
             }
+        }
+    }
+
+    private double obtenerPrecioProducto(int index) {
+        switch (index) {
+            case 0:
+                return 1.50; // Precio de huevos
+            case 1:
+                return 0.90; // Precio de leche
+            case 2:
+                return 1.20; // Precio de fideos
+            case 3:
+                return 0.80; // Precio de azucar
+            case 4:
+                return 0.50; // Precio de pan
+            case 5:
+                return 0.60; // Precio de arroz
+            case 6:
+                return 2.00; // Precio de embutidos
+            case 7:
+                return 5.00; // Precio de vino
+            default:
+                return 0.0;
         }
     }
 
@@ -233,18 +274,21 @@ public class stock extends JFrame {
     private void agregarNuevoProducto() {
         JTextField nombreField = new JTextField();
         JTextField precioField = new JTextField();
+        JTextField cantidadField = new JTextField();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleccione una imagen");
 
         int result = JOptionPane.showConfirmDialog(null, new Object[]{
                 "Nombre:", nombreField,
                 "Precio:", precioField,
+                "Cantidad:", cantidadField,
                 "Imagen:", fileChooser
         }, "Agregar Nuevo Producto", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             String nombre = nombreField.getText();
             String precio = precioField.getText();
+            String cantidad = cantidadField.getText();
             String imagenPath = fileChooser.getSelectedFile().getAbsolutePath();
 
             // Copiar la imagen seleccionada a la carpeta src/images del proyecto
@@ -268,9 +312,11 @@ public class stock extends JFrame {
                 preparedStatement.executeUpdate();
 
                 // Insertar en la tabla stock
-                String stockQuery = "INSERT INTO stock (nombre, cantidad) VALUES (?, 0)";
+                String stockQuery = "INSERT INTO stock (nombre, cantidad, precio) VALUES (?, ?, ?)";
                 PreparedStatement stockStatement = connection.prepareStatement(stockQuery);
                 stockStatement.setString(1, nombre);
+                stockStatement.setInt(2, Integer.parseInt(cantidad));
+                stockStatement.setString(3, precio);
                 stockStatement.executeUpdate();
 
                 JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
