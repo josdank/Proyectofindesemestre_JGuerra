@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="twilio-8.32.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../twilio-8.32.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

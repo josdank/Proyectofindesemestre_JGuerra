@@ -129,8 +129,15 @@ public class transaccion extends JFrame {
         volver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new login().setVisible(true);
-                dispose();
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new login().mainPanel5);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                JFrame transaccion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel6);
+                transaccion_frame.dispose();
             }
         });
     }

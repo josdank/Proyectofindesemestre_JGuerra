@@ -1,7 +1,7 @@
 package miniMarket.interfaz.admin;
 
-import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.estilos.estilos;
+import miniMarket.interfaz.clases.DatabaseConnection;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -34,7 +34,6 @@ public class cajerosCreacion extends JFrame {
         estilos.aplicarEstilos2(crearCajeroButton);
         estilos.aplicarEstilos3(mostrarContrasenia);
 
-
         mostrarContrasenia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,20 +44,25 @@ public class cajerosCreacion extends JFrame {
                 }
             }
         });
-        // Acción del botón Volver
+
         volverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new actividad().setVisible(true);
-                dispose();
+                JFrame frame = new JFrame("Biografía");
+                frame.setContentPane(new actividad().mainPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                JFrame hobbies_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel1);
+                hobbies_frame.dispose();
             }
         });
 
-        // Acción del botón Crear Cajero
         crearCajeroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Validar campos
                 if (ntelefono.getText().isEmpty() || nombre.getText().isEmpty() || usuario.getText().isEmpty() || password.getPassword().length == 0) {
                     JOptionPane.showMessageDialog(cajerosCreacion.this, "Todos los campos deben estar llenos.", "Error", JOptionPane.ERROR_MESSAGE);
                     highlightEmptyFields();
@@ -69,11 +73,9 @@ public class cajerosCreacion extends JFrame {
                     JOptionPane.showMessageDialog(cajerosCreacion.this, "El campo nombre debe contener al menos dos nombres y un apellido.", "Error", JOptionPane.ERROR_MESSAGE);
                     nombre.setBorder(BorderFactory.createLineBorder(Color.RED));
                 } else {
-                    // Crear cajero en la base de datos
                     try {
                         crearCajeroEnBaseDeDatos(nombre.getText(), usuario.getText(), new String(password.getPassword()), ntelefono.getText());
-                        // Enviar mensaje de WhatsApp
-                        enviarMensajeWhatsApp(ntelefono.getText(), "Su usuario, cajero ha sido creado correctamente, estas son sus credenciales para su acceso\\nUsuario:" + usuario +"\\nContraseña:" + password);
+                        enviarMensajeWhatsApp(ntelefono.getText(), "Su usuario: " + usuario.getText() + " y su contraseña: " + new String(password.getPassword()));
                         JOptionPane.showMessageDialog(cajerosCreacion.this, "Cajero creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(cajerosCreacion.this, "Error al crear el cajero en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -117,33 +119,51 @@ public class cajerosCreacion extends JFrame {
 
     private void crearCajeroEnBaseDeDatos(String nombre, String usuario, String contrasena, String telefono) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
-        String query = "INSERT INTO cajeros (nombre_completo, usuario, contrasena, telefono) VALUES (?, ?, ?, ?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, nombre);
-        preparedStatement.setString(2, usuario);
-        preparedStatement.setString(3, contrasena);
-        preparedStatement.setString(4, telefono);
-        preparedStatement.executeUpdate();
+        String query1 = "INSERT INTO cajeros (nombre_completo, usuario, contrasena, telefono) VALUES (?, ?, ?, ?)";
+        String query2 = "INSERT INTO usuarios (username, password, role) VALUES (?, ?, 'Cajero')";
+
+        try {
+            connection.setAutoCommit(false); // Iniciar transacción
+
+            try (PreparedStatement preparedStatement1 = connection.prepareStatement(query1);
+                 PreparedStatement preparedStatement2 = connection.prepareStatement(query2)) {
+
+                // Insertar en la tabla 'cajeros'
+                preparedStatement1.setString(1, nombre);
+                preparedStatement1.setString(2, usuario);
+                preparedStatement1.setString(3, contrasena);
+                preparedStatement1.setString(4, telefono);
+                preparedStatement1.executeUpdate();
+
+                // Insertar en la tabla 'usuarios'
+                preparedStatement2.setString(1, usuario);
+                preparedStatement2.setString(2, contrasena);
+                preparedStatement2.executeUpdate();
+
+                connection.commit(); // Confirmar transacción
+            } catch (SQLException ex) {
+                connection.rollback(); // Revertir transacción en caso de error
+                throw ex;
+            }
+        } finally {
+            connection.setAutoCommit(true); // Restaurar modo autocommit
+        }
     }
 
     private void enviarMensajeWhatsApp(String telefono, String mensaje) {
-        // Remover todos los caracteres no numéricos del número de teléfono
         telefono = telefono.replaceAll("[^\\d]", "");
-
-        // Asegurarse de que el número de teléfono no tenga el 0 inicial y que comience con el código de país
         if (telefono.startsWith("0")) {
-            telefono = telefono.substring(1); // Elimina el 0 inicial
+            telefono = telefono.substring(1);
         }
-        String numeroCompleto = "+593" + telefono;
+        String numeroCompleto =  telefono;
 
-        String url = "https://wa.me/" + "?text=" + mensaje.replace(" ", "%20");
+        String url = "https://wa.me/" + numeroCompleto + "?text=" + mensaje.replace(" ", "%20");
         try {
             Desktop.getDesktop().browse(new URL(url).toURI());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
-
 
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Crear Cajero");

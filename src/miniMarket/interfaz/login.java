@@ -24,6 +24,10 @@ public class login extends JFrame {
     private JComboBox<String> comboBox1;
 
     public login() {
+        // Inicializar el comboBox con las opciones requeridas
+        comboBox1.addItem(" ");
+        comboBox1.addItem("Cajero");
+        comboBox1.addItem("Admin");
 
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
         icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
@@ -43,11 +47,13 @@ public class login extends JFrame {
                 Usuario user = authenticate(username, password, role);
                 if (user != null) {
                     if (user.getRole().equals("Cajero")) {
-                        new transaccion().setVisible(true);
+                        new transaccion(user).setVisible(true);
                     } else if (user.getRole().equals("Admin")) {
                         new actividad().setVisible(true);
                     }
-                    dispose();
+                    //Cerrar la ventana actual
+                    JFrame login_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel5);
+                    login_frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(login.this, "Credenciales incorrectas.");
                 }
@@ -64,7 +70,6 @@ public class login extends JFrame {
                 }
             }
         });
-
     }
 
     private Usuario authenticate(String username, String password, String role) {
@@ -94,6 +99,7 @@ public class login extends JFrame {
             loginFrame.pack();
             loginFrame.setLocationRelativeTo(null);
             loginFrame.setVisible(true);
+
         });
     }
 }
