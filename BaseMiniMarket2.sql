@@ -39,7 +39,7 @@ CREATE TABLE productos (
 select * from productos;
 select * from stock;
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM productos WHERE nombre = 'Queso';
+DELETE FROM productos WHERE nombre = 'Habas';
 SET SQL_SAFE_UPDATES = 1;
 CREATE TABLE ventas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,6 +72,9 @@ select * from stock;
 TRUNCATE TABLE stock;
 SET SQL_SAFE_UPDATES = 0;
 DELETE FROM stock;
+SET SQL_SAFE_UPDATES = 1;
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM stock WHERE nombre = 'Habas';
 SET SQL_SAFE_UPDATES = 1;
 
 

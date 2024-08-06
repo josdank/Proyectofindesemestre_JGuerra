@@ -48,7 +48,7 @@ public class login extends JFrame {
                 if (user != null) {
                     if (user.getRole().equals("Cajero")) {
                         JFrame frame = new JFrame("Transaccion");
-                        frame.setContentPane(new transaccion(Integer.parseInt(user.getId())).mainPanel6);
+                        frame.setContentPane(new transaccion(Integer.parseInt(user.getId())).getMainPanel6());
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frame.pack();
                         frame.setLocationRelativeTo(null);

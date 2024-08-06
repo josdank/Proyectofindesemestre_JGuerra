@@ -53,6 +53,10 @@ public class transaccion extends JFrame {
     private JButton button16;
 
     private int[] cantidades = new int[8];
+    private List<JLabel> dynamicProductLabels = new ArrayList<>();
+    private List<JLabel> dynamicQuantityLabels = new ArrayList<>();
+    private List<JButton> dynamicIncrementButtons = new ArrayList<>();
+    private List<JButton> dynamicDecrementButtons = new ArrayList<>();
     private List<String> productosVendidos = new ArrayList<>();
     private double precioTotal = 0.0;
     private int cajeroId;
@@ -60,32 +64,14 @@ public class transaccion extends JFrame {
     public transaccion(int cajeroId) {
         this.cajeroId = cajeroId;
 
-        // Configuración de imágenes
-        setLabelImage(huevos, "src/huevos.jpg");
-        setLabelImage(leche, "src/leche.jpg");
-        setLabelImage(fideos, "src/fideos.jpg");
-        setLabelImage(azucar, "src/azucar.jpg");
-        setLabelImage(pan, "src/pan.jpg");
-        setLabelImage(arroz, "src/arroz.jpg");
-        setLabelImage(embutidos, "src/embutidos.jpg");
-        setLabelImage(vino, "src/vino.jpg");
-
-        inicializarCantidades();
+        inicializarComponentesEstaticos();
+        inicializarComponentesDinamicos();
 
         // Aplica estilos
         estilos.aplicarColorDeFondo(mainPanel6);
-        estilos.aplicarEstilos(huevos);
-        estilos.aplicarEstilos(leche);
-        estilos.aplicarEstilos(fideos);
-        estilos.aplicarEstilos(azucar);
-        estilos.aplicarEstilos(pan);
-        estilos.aplicarEstilos(arroz);
-        estilos.aplicarEstilos(embutidos);
-        estilos.aplicarEstilos(vino);
-        estilos.aplicarEstilos2(volver);
-        estilos.aplicarEstilos2(compra);
+        aplicarEstilosComponentesEstaticos();
 
-        // Acciones de incremento
+        // Acciones de incremento y decremento para componentes estáticos
         button1.addActionListener(e -> incrementarCantidad(0, cantidad1));
         button2.addActionListener(e -> incrementarCantidad(1, cantidad2));
         button3.addActionListener(e -> incrementarCantidad(2, cantidad3));
@@ -95,7 +81,6 @@ public class transaccion extends JFrame {
         button7.addActionListener(e -> incrementarCantidad(6, cantidad7));
         button8.addActionListener(e -> incrementarCantidad(7, cantidad8));
 
-        // Acciones de decremento
         button9.addActionListener(e -> decrementarCantidad(0, cantidad1));
         button10.addActionListener(e -> decrementarCantidad(1, cantidad2));
         button11.addActionListener(e -> decrementarCantidad(2, cantidad3));
@@ -136,10 +121,78 @@ public class transaccion extends JFrame {
                 login_frame.dispose();
             }
         });
+
+        setContentPane(mainPanel6);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setSize(800, 600); // Ajustar el tamaño de la ventana
     }
 
-    public transaccion() {
-        // Constructor vacío necesario para crear un nuevo JFrame sin pasar el ID del cajero
+    private void inicializarComponentesEstaticos() {
+        // Configuración de imágenes para componentes estáticos
+        setLabelImage(huevos, "src/huevos.jpg");
+        setLabelImage(leche, "src/leche.jpg");
+        setLabelImage(fideos, "src/fideos.jpg");
+        setLabelImage(azucar, "src/azucar.jpg");
+        setLabelImage(pan, "src/pan.jpg");
+        setLabelImage(arroz, "src/arroz.jpg");
+        setLabelImage(embutidos, "src/embutidos.jpg");
+        setLabelImage(vino, "src/vino.jpg");
+
+        inicializarCantidadesEstaticas();
+    }
+
+    private void inicializarComponentesDinamicos() {
+        // Implementar la lógica para inicializar componentes dinámicos desde la base de datos
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String query = "SELECT * FROM stock WHERE nombre NOT IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String nombre = resultSet.getString("nombre");
+                int cantidad = resultSet.getInt("cantidad");
+                double precio = resultSet.getDouble("precio");
+                String imagen = resultSet.getString("imagen");
+
+                JLabel productLabel = new JLabel();
+                setLabelImage(productLabel, imagen);
+                dynamicProductLabels.add(productLabel);
+
+                JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
+                dynamicQuantityLabels.add(quantityLabel);
+
+                JButton incrementButton = new JButton("+");
+                incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
+                dynamicIncrementButtons.add(incrementButton);
+
+                JButton decrementButton = new JButton("-");
+                decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
+                dynamicDecrementButtons.add(decrementButton);
+
+                mainPanel6.add(productLabel);
+                mainPanel6.add(quantityLabel);
+                mainPanel6.add(incrementButton);
+                mainPanel6.add(decrementButton);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void aplicarEstilosComponentesEstaticos() {
+        estilos.aplicarEstilos(huevos);
+        estilos.aplicarEstilos(leche);
+        estilos.aplicarEstilos(fideos);
+        estilos.aplicarEstilos(azucar);
+        estilos.aplicarEstilos(pan);
+        estilos.aplicarEstilos(arroz);
+        estilos.aplicarEstilos(embutidos);
+        estilos.aplicarEstilos(vino);
+        estilos.aplicarEstilos2(volver);
+        estilos.aplicarEstilos2(compra);
     }
 
     private void setLabelImage(JLabel label, String imagePath) {
@@ -160,10 +213,25 @@ public class transaccion extends JFrame {
         }
     }
 
-    private void inicializarCantidades() {
+    private void incrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
+        int cantidad = Integer.parseInt(cantidadLabel.getText());
+        cantidad++;
+        cantidadLabel.setText(String.valueOf(cantidad));
+    }
+
+    private void decrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
+        int cantidad = Integer.parseInt(cantidadLabel.getText());
+        if (cantidad > 0) {
+            cantidad--;
+            cantidadLabel.setText(String.valueOf(cantidad));
+        }
+    }
+
+    private void inicializarCantidadesEstaticas() {
+        // Código para inicializar las cantidades de productos estáticos desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String query = "SELECT * FROM stock";
+            String query = "SELECT * FROM stock WHERE nombre IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -331,5 +399,9 @@ public class transaccion extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new transaccion(1).setVisible(true)); // El ID del cajero debe ser pasado aquí
+    }
+
+    public Container getMainPanel6() {
+        return mainPanel6;
     }
 }
