@@ -54,6 +54,7 @@ public class stock extends JFrame {
     private JButton button14;
     private JButton button15;
     private JButton button16;
+    private JButton volver;
 
     private int[] cantidades = new int[8];
 
@@ -122,6 +123,20 @@ public class stock extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 agregarNuevoProducto();
+            }
+        });
+        volver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Actividades");
+                frame.setContentPane(new actividad().mainPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                JFrame stock_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel2);
+                stock_frame.dispose();
             }
         });
     }

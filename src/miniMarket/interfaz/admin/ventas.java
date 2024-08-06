@@ -20,6 +20,7 @@ public class ventas extends JFrame {
     private JTextField ncajero;
     private JLabel cajero;
     private JTable table1;
+    private JButton volver;
 
     public ventas() {
         // Configuración de los iconos de las imágenes
@@ -47,6 +48,20 @@ public class ventas extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(ventas.this, "Por favor, ingrese el nombre completo o usuario del cajero.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+        volver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Actividad");
+                frame.setContentPane(new actividad().mainPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                JFrame hobbies_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel3);
+                hobbies_frame.dispose();
             }
         });
     }

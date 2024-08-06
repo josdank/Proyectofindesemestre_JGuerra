@@ -59,8 +59,15 @@ public class actividad extends JFrame {
         volverLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new login().setVisible(true);
-                dispose();
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new login().mainPanel5);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                JFrame ccreacion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
+                ccreacion_frame.dispose();
             }
         });
 

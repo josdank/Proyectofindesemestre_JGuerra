@@ -48,15 +48,15 @@ public class cajerosCreacion extends JFrame {
         volverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("Biografía");
+                JFrame frame = new JFrame("Actividades");
                 frame.setContentPane(new actividad().mainPanel);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
 
-                JFrame hobbies_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel1);
-                hobbies_frame.dispose();
+                JFrame ccreacion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel1);
+                ccreacion_frame.dispose();
             }
         });
 

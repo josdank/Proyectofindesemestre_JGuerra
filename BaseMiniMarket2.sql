@@ -8,10 +8,14 @@ CREATE TABLE usuarios (
     role ENUM('Cajero', 'Admin') NOT NULL
 );
 
+DELETE FROM usuarios;
+ALTER TABLE usuarios AUTO_INCREMENT = 1;
 select * from usuarios;
-
-INSERT INTO usuarios (username, password, role) VALUES ('cajero1', 'passwordCajero1', 'Cajero');
-INSERT INTO usuarios (username, password, role) VALUES ('Josue', 'passwordCajero1', 'Admin');
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM usuarios WHERE id = 8;
+SET SQL_SAFE_UPDATES = 1;
+INSERT INTO usuarios (username, password, role) VALUES ('cajero1', 'password1', 'Cajero');
+INSERT INTO usuarios (username, password, role) VALUES ('admin1', 'password1', 'Admin');
 
 CREATE TABLE cajeros (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,12 +25,9 @@ CREATE TABLE cajeros (
     telefono VARCHAR(16) NOT NULL
 );
 select * from cajeros;
-
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM cajeros WHERE usuario = 'caj2';
+DELETE FROM cajeros WHERE usuario = 'cajero2';
 SET SQL_SAFE_UPDATES = 1;
-
-
 
 CREATE TABLE productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,6 +37,7 @@ CREATE TABLE productos (
     cantidad INT NOT NULL DEFAULT 0
 );
 select * from productos;
+
 
 CREATE TABLE ventas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,8 +65,14 @@ CREATE TABLE stock (
     nombre VARCHAR(255) NOT NULL,
     cantidad INT NOT NULL DEFAULT 100
 );
-
+ALTER TABLE stock ADD COLUMN precio DECIMAL(10, 2) NOT NULL;
 select * from stock;
+TRUNCATE TABLE stock;
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM stock;
+SET SQL_SAFE_UPDATES = 1;
+
+
 
 
 

@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class transaccion extends JFrame {
     public JPanel mainPanel6;
@@ -51,40 +53,22 @@ public class transaccion extends JFrame {
     private JButton button16;
 
     private int[] cantidades = new int[8];
+    private List<String> productosVendidos = new ArrayList<>();
+    private double precioTotal = 0.0;
+    private int cajeroId;
 
-    public transaccion() {
+    public transaccion(int cajeroId) {
+        this.cajeroId = cajeroId;
+
         // Configuración de imágenes
-        ImageIcon icon = new ImageIcon("src/huevos.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        huevos.setIcon(icon);
-
-        icon = new ImageIcon("src/leche.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        leche.setIcon(icon);
-
-        icon = new ImageIcon("src/fideos.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        fideos.setIcon(icon);
-
-        icon = new ImageIcon("src/azucar.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        azucar.setIcon(icon);
-
-        icon = new ImageIcon("src/pan.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        pan.setIcon(icon);
-
-        icon = new ImageIcon("src/arroz.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        arroz.setIcon(icon);
-
-        icon = new ImageIcon("src/embutidos.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        embutidos.setIcon(icon);
-
-        icon = new ImageIcon("src/vino.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
-        vino.setIcon(icon);
+        setLabelImage(huevos, "src/huevos.jpg");
+        setLabelImage(leche, "src/leche.jpg");
+        setLabelImage(fideos, "src/fideos.jpg");
+        setLabelImage(azucar, "src/azucar.jpg");
+        setLabelImage(pan, "src/pan.jpg");
+        setLabelImage(arroz, "src/arroz.jpg");
+        setLabelImage(embutidos, "src/embutidos.jpg");
+        setLabelImage(vino, "src/vino.jpg");
 
         inicializarCantidades();
 
@@ -100,8 +84,6 @@ public class transaccion extends JFrame {
         estilos.aplicarEstilos(vino);
         estilos.aplicarEstilos2(volver);
         estilos.aplicarEstilos2(compra);
-
-
 
         // Acciones de incremento
         button1.addActionListener(e -> incrementarCantidad(0, cantidad1));
@@ -123,25 +105,25 @@ public class transaccion extends JFrame {
         button15.addActionListener(e -> decrementarCantidad(6, cantidad7));
         button16.addActionListener(e -> decrementarCantidad(7, cantidad8));
 
-        // Acción del botón añadirStockButton
+        // Acción del botón añadir compra en la base de datos
         compra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    actualizarStockEnBaseDeDatos();
-                    JOptionPane.showMessageDialog(transaccion.this, "Stock actualizado exitosamente.");
+                    realizarCompra();
+                    JOptionPane.showMessageDialog(transaccion.this, "Compra realizada con éxito.");
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(transaccion.this, "Error al actualizar el stock en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(transaccion.this, "Error al realizar la compra en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
                 }
             }
         });
 
-        // Acción del botón productos
+        // Acción del botón volver
         volver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("Biografía");
+                JFrame frame = new JFrame("Login");
                 frame.setContentPane(new login().mainPanel5);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
@@ -152,6 +134,16 @@ public class transaccion extends JFrame {
                 login_frame.dispose();
             }
         });
+    }
+
+    public transaccion() {
+
+    }
+
+    private void setLabelImage(JLabel label, String imagePath) {
+        ImageIcon icon = new ImageIcon(imagePath);
+        icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
+        label.setIcon(icon);
     }
 
     private void incrementarCantidad(int index, JLabel cantidadLabel) {
@@ -167,7 +159,6 @@ public class transaccion extends JFrame {
     }
 
     private void inicializarCantidades() {
-        // Código para inicializar las cantidades desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
             String query = "SELECT * FROM stock";
@@ -180,35 +171,35 @@ public class transaccion extends JFrame {
                 switch (nombre.toLowerCase()) {
                     case "huevos":
                         cantidades[0] = cantidad;
-                        cantidad1.setText(String.valueOf(cantidad));
+                        cantidad1.setText(String.valueOf(cantidades[0]));
                         break;
                     case "leche":
                         cantidades[1] = cantidad;
-                        cantidad2.setText(String.valueOf(cantidad));
+                        cantidad2.setText(String.valueOf(cantidades[1]));
                         break;
                     case "fideos":
                         cantidades[2] = cantidad;
-                        cantidad3.setText(String.valueOf(cantidad));
+                        cantidad3.setText(String.valueOf(cantidades[2]));
                         break;
                     case "azucar":
                         cantidades[3] = cantidad;
-                        cantidad4.setText(String.valueOf(cantidad));
+                        cantidad4.setText(String.valueOf(cantidades[3]));
                         break;
                     case "pan":
                         cantidades[4] = cantidad;
-                        cantidad5.setText(String.valueOf(cantidad));
+                        cantidad5.setText(String.valueOf(cantidades[4]));
                         break;
                     case "arroz":
                         cantidades[5] = cantidad;
-                        cantidad6.setText(String.valueOf(cantidad));
+                        cantidad6.setText(String.valueOf(cantidades[5]));
                         break;
                     case "embutidos":
                         cantidades[6] = cantidad;
-                        cantidad7.setText(String.valueOf(cantidad));
+                        cantidad7.setText(String.valueOf(cantidades[6]));
                         break;
                     case "vino":
                         cantidades[7] = cantidad;
-                        cantidad8.setText(String.valueOf(cantidad));
+                        cantidad8.setText(String.valueOf(cantidades[7]));
                         break;
                 }
             }
@@ -217,17 +208,79 @@ public class transaccion extends JFrame {
         }
     }
 
-    private void actualizarStockEnBaseDeDatos() throws SQLException {
+    private void realizarCompra() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
-        String query = "UPDATE productos SET cantidad = ? WHERE nombre = ?";
+        String queryUpdate = "UPDATE stock SET cantidad = ? WHERE nombre = ?";
+        String querySelect = "SELECT cantidad, precio FROM stock WHERE nombre = ?";
+        PreparedStatement updateStmt = connection.prepareStatement(queryUpdate);
+        PreparedStatement selectStmt = connection.prepareStatement(querySelect);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            for (int i = 0; i < 8; i++) {
-                preparedStatement.setInt(1, cantidades[i]);
-                preparedStatement.setString(2, getNombreProducto(i));
-                preparedStatement.executeUpdate();
+        boolean stockAgotado = false;
+
+        for (int i = 0; i < 8; i++) {
+            if (cantidades[i] > 0) {
+                selectStmt.setString(1, getNombreProducto(i));
+                ResultSet resultSet = selectStmt.executeQuery();
+
+                if (resultSet.next()) {
+                    int stockActual = resultSet.getInt("cantidad");
+                    double precio = resultSet.getDouble("precio");
+                    if (stockActual >= cantidades[i]) {
+                        int nuevoStock = stockActual - cantidades[i];
+                        updateStmt.setInt(1, nuevoStock);
+                        updateStmt.setString(2, getNombreProducto(i));
+                        updateStmt.executeUpdate();
+
+                        productosVendidos.add(getNombreProducto(i) + ": " + cantidades[i]);
+                        precioTotal += precio * cantidades[i];
+                    } else {
+                        stockAgotado = true;
+                        JOptionPane.showMessageDialog(this, "Lo sentimos, no disponemos de " + getNombreProducto(i) + " en estos momentos, el stock se ha agotado.", "Stock Agotado", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
             }
         }
+        if (!stockAgotado) {
+            guardarVenta();
+        }
+    }
+
+    private void guardarVenta() throws SQLException {
+        Connection connection = DatabaseConnection.getConnection();
+        String query = "INSERT INTO ventas (precio_total, productos_vendidos, precio_por_producto, cajero_id) VALUES (?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setDouble(1, precioTotal);
+        preparedStatement.setString(2, String.join(", ", productosVendidos));
+        preparedStatement.setString(3, obtenerPreciosPorProducto());
+        preparedStatement.setInt(4, cajeroId);
+
+        preparedStatement.executeUpdate();
+    }
+
+    private String obtenerPreciosPorProducto() {
+        StringBuilder precios = new StringBuilder();
+        for (String producto : productosVendidos) {
+            String[] partes = producto.split(": ");
+            precios.append(partes[0]).append(": ").append(obtenerPrecioProducto(partes[0])).append(", ");
+        }
+        return precios.toString();
+    }
+
+    private double obtenerPrecioProducto(String nombreProducto) {
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String query = "SELECT precio FROM stock WHERE nombre = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, nombreProducto);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble("precio");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return 0.0;
     }
 
     private String getNombreProducto(int index) {
@@ -253,43 +306,8 @@ public class transaccion extends JFrame {
         }
     }
 
-    private void agregarNuevoProducto() {
-        JTextField nombreField = new JTextField();
-        JTextField precioField = new JTextField();
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccione una imagen");
-
-        int result = JOptionPane.showConfirmDialog(null, new Object[]{
-                "Nombre:", nombreField,
-                "Precio:", precioField,
-                "Imagen:", fileChooser
-        }, "Agregar Nuevo Producto", JOptionPane.OK_CANCEL_OPTION);
-
-        if (result == JOptionPane.OK_OPTION) {
-            String nombre = nombreField.getText();
-            String precio = precioField.getText();
-            String imagenPath = fileChooser.getSelectedFile().getAbsolutePath();
-
-            // Guardar nuevo producto en la base de datos
-            try {
-                Connection connection = DatabaseConnection.getConnection();
-                String query = "INSERT INTO productos (nombre, precio, imagen) VALUES (?, ?, ?)";
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, nombre);
-                preparedStatement.setString(2, precio);
-                preparedStatement.setString(3, imagenPath);
-                preparedStatement.executeUpdate();
-
-                JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Error al agregar el producto en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            }
-        }
-    }
-
     public void setVisible(boolean b) {
-        JFrame frame = new JFrame("Crear Cajero");
+        JFrame frame = new JFrame("Transaccion");
         frame.setContentPane(mainPanel6);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -298,6 +316,6 @@ public class transaccion extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new transaccion().setVisible(true));
+        SwingUtilities.invokeLater(() -> new transaccion(1).setVisible(true)); // El ID del cajero debe ser pasado aquí
     }
 }
