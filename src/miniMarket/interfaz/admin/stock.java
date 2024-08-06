@@ -319,11 +319,13 @@ public class stock extends JFrame {
             // Guardar nuevo producto en la base de datos
             try {
                 Connection connection = DatabaseConnection.getConnection();
-                String query = "INSERT INTO productos (nombre, precio, imagen) VALUES (?, ?, ?)";
+                String query = "INSERT INTO productos (nombre, precio, imagen, cantidad) VALUES (?, ?, ?, ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, nombre);
                 preparedStatement.setString(2, precio);
                 preparedStatement.setString(3, imagenPath);
+                preparedStatement.setInt(4, Integer.parseInt(cantidad));
+
                 preparedStatement.executeUpdate();
 
                 // Insertar en la tabla stock

@@ -112,6 +112,8 @@ public class transaccion extends JFrame {
                 try {
                     realizarCompra();
                     JOptionPane.showMessageDialog(transaccion.this, "Compra realizada con éxito.");
+                    // Redirigir a la facturación
+                    redirigirAFacturacion();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(transaccion.this, "Error al realizar la compra en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
@@ -137,7 +139,7 @@ public class transaccion extends JFrame {
     }
 
     public transaccion() {
-
+        // Constructor vacío necesario para crear un nuevo JFrame sin pasar el ID del cajero
     }
 
     private void setLabelImage(JLabel label, String imagePath) {
@@ -240,7 +242,7 @@ public class transaccion extends JFrame {
                 }
             }
         }
-        if (!stockAgotado) {
+        if (!productosVendidos.isEmpty()) {
             guardarVenta();
         }
     }
@@ -304,6 +306,18 @@ public class transaccion extends JFrame {
             default:
                 return "";
         }
+    }
+
+    private void redirigirAFacturacion() {
+        JFrame frame = new JFrame("Facturación");
+        frame.setContentPane(new facturacion().mainPanel4);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        JFrame transaccion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel6);
+        transaccion_frame.dispose();
     }
 
     public void setVisible(boolean b) {

@@ -37,8 +37,10 @@ CREATE TABLE productos (
     cantidad INT NOT NULL DEFAULT 0
 );
 select * from productos;
-
-
+select * from stock;
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM productos WHERE nombre = 'Queso';
+SET SQL_SAFE_UPDATES = 1;
 CREATE TABLE ventas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(10, 2) NOT NULL,
@@ -71,6 +73,7 @@ TRUNCATE TABLE stock;
 SET SQL_SAFE_UPDATES = 0;
 DELETE FROM stock;
 SET SQL_SAFE_UPDATES = 1;
+
 
 
 

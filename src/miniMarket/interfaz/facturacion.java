@@ -37,7 +37,7 @@ public class facturacion extends JFrame {
     private JLabel img2;
     private Usuario cashier;
 
-    public facturacion(Usuario cashier) {
+    public facturacion() {
         this.cashier = cashier;
 
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
@@ -163,7 +163,7 @@ public class facturacion extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            facturacion frame = new facturacion(new Usuario("cajero1", "Cajero 1", "1234", "Cajero"));
+            facturacion frame = new facturacion();
             frame.setContentPane(frame.mainPanel4);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();

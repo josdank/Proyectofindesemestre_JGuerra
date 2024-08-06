@@ -47,11 +47,19 @@ public class login extends JFrame {
                 Usuario user = authenticate(username, password, role);
                 if (user != null) {
                     if (user.getRole().equals("Cajero")) {
-                        new transaccion().setVisible(true);
+                        JFrame frame = new JFrame("Transaccion");
+                        frame.setContentPane(new transaccion(Integer.parseInt(user.getId())).mainPanel6);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        frame.pack();
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
+
+                        JFrame transaccion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel5);
+                        transaccion_frame.dispose();
                     } else if (user.getRole().equals("Admin")) {
                         new actividad().setVisible(true);
                     }
-                    //Cerrar la ventana actual
+                    // Cerrar la ventana actual
                     JFrame login_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel5);
                     login_frame.dispose();
                 } else {
@@ -59,6 +67,7 @@ public class login extends JFrame {
                 }
             }
         });
+
 
         mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
             @Override
