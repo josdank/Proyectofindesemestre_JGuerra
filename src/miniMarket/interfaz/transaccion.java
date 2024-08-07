@@ -5,6 +5,8 @@ import miniMarket.estilos.estilos;
 
 import javax.swing.*;
 import java.awt.*;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -64,6 +66,8 @@ public class transaccion extends JFrame {
     public transaccion(int cajeroId) {
         this.cajeroId = cajeroId;
 
+        mainPanel6.setLayout(new GridLayoutManager(20, 4, new Insets(10, 10, 10, 10), -1, -1));
+
         inicializarComponentesEstaticos();
         inicializarComponentesDinamicos();
 
@@ -122,7 +126,8 @@ public class transaccion extends JFrame {
             }
         });
 
-        setContentPane(mainPanel6);
+        JScrollPane scrollPane = new JScrollPane(mainPanel6);
+        setContentPane(scrollPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
@@ -147,9 +152,12 @@ public class transaccion extends JFrame {
         // Implementar la lógica para inicializar componentes dinámicos desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String query = "SELECT * FROM stock WHERE nombre NOT IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
+            String query = "SELECT * FROM productos WHERE nombre NOT IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
+
+            int row = 2; // Starting row for dynamic components
+            int col = 0; // Starting column for dynamic components
 
             while (resultSet.next()) {
                 String nombre = resultSet.getString("nombre");
@@ -157,25 +165,39 @@ public class transaccion extends JFrame {
                 double precio = resultSet.getDouble("precio");
                 String imagen = resultSet.getString("imagen");
 
+                JLabel nameLabel = new JLabel(nombre + " - $" + precio);
+                GridConstraints nameConstraints = new GridConstraints(row, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(nameLabel, nameConstraints);
+
                 JLabel productLabel = new JLabel();
                 setLabelImage(productLabel, imagen);
-                dynamicProductLabels.add(productLabel);
+                GridConstraints productConstraints = new GridConstraints(row + 1, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(productLabel, productConstraints);
 
                 JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
-                dynamicQuantityLabels.add(quantityLabel);
+                GridConstraints quantityConstraints = new GridConstraints(row + 3, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(quantityLabel, quantityConstraints);
 
                 JButton incrementButton = new JButton("+");
                 incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
-                dynamicIncrementButtons.add(incrementButton);
+                GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(incrementButton, incrementConstraints);
 
                 JButton decrementButton = new JButton("-");
                 decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
+                GridConstraints decrementConstraints = new GridConstraints(row + 2, col + 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(decrementButton, decrementConstraints);
+
+                dynamicProductLabels.add(productLabel);
+                dynamicQuantityLabels.add(quantityLabel);
+                dynamicIncrementButtons.add(incrementButton);
                 dynamicDecrementButtons.add(decrementButton);
 
-                mainPanel6.add(productLabel);
-                mainPanel6.add(quantityLabel);
-                mainPanel6.add(incrementButton);
-                mainPanel6.add(decrementButton);
+                col++;
+                if (col >= 4) { // Assuming 4 columns per row
+                    col = 0;
+                    row += 5; // Move to the next row, keeping space between groups
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
