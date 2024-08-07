@@ -15,6 +15,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Clase cajerosCreacion que representa la ventana para la creación de cajeros.
+ */
 public class cajerosCreacion extends JFrame {
     private JTextField ntelefono;
     private JTextField nombre;
@@ -25,6 +28,10 @@ public class cajerosCreacion extends JFrame {
     private JButton volverButton;
     private JButton crearCajeroButton;
 
+    /**
+     * Constructor de la clase cajerosCreacion.
+     * Configura los estilos y las acciones de los componentes.
+     */
     public cajerosCreacion() {
         estilos.aplicarColorDeFondo(mainPanel1);
         estilos.aplicarEstilos1(nombre);
@@ -34,6 +41,7 @@ public class cajerosCreacion extends JFrame {
         estilos.aplicarEstilos2(crearCajeroButton);
         estilos.aplicarEstilos3(mostrarContrasenia);
 
+        // Acción para mostrar u ocultar la contraseña
         mostrarContrasenia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,6 +53,7 @@ public class cajerosCreacion extends JFrame {
             }
         });
 
+        // Acción para volver a la ventana de actividades
         volverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,6 +69,7 @@ public class cajerosCreacion extends JFrame {
             }
         });
 
+        // Acción para crear un cajero
         crearCajeroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,11 +96,20 @@ public class cajerosCreacion extends JFrame {
         });
     }
 
+    /**
+     * Verifica si el nombre completo es válido.
+     *
+     * @param nombreCompleto el nombre completo a verificar
+     * @return true si el nombre es válido, false en caso contrario
+     */
     private boolean nombreCompletoEsValido(String nombreCompleto) {
         String[] partes = nombreCompleto.trim().split("\\s+");
         return partes.length >= 3;
     }
 
+    /**
+     * Resalta los campos vacíos con un borde rojo.
+     */
     private void highlightEmptyFields() {
         Border redBorder = BorderFactory.createLineBorder(Color.RED);
         Border defaultBorder = UIManager.getBorder("TextField.border");
@@ -117,6 +136,15 @@ public class cajerosCreacion extends JFrame {
         }
     }
 
+    /**
+     * Crea un cajero en la base de datos.
+     *
+     * @param nombre el nombre del cajero
+     * @param usuario el nombre de usuario del cajero
+     * @param contrasena la contraseña del cajero
+     * @param telefono el número de teléfono del cajero
+     * @throws SQLException si ocurre un error al acceder a la base de datos
+     */
     private void crearCajeroEnBaseDeDatos(String nombre, String usuario, String contrasena, String telefono) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query1 = "INSERT INTO cajeros (nombre_completo, usuario, contrasena, telefono) VALUES (?, ?, ?, ?)";
@@ -150,6 +178,12 @@ public class cajerosCreacion extends JFrame {
         }
     }
 
+    /**
+     * Envía un mensaje de WhatsApp al número especificado.
+     *
+     * @param telefono el número de teléfono al que se enviará el mensaje
+     * @param mensaje el contenido del mensaje
+     */
     private void enviarMensajeWhatsApp(String telefono, String mensaje) {
         telefono = telefono.replaceAll("[^\\d]", "");
         if (telefono.startsWith("0")) {
@@ -165,6 +199,11 @@ public class cajerosCreacion extends JFrame {
         }
     }
 
+    /**
+     * Establece la visibilidad de la ventana de creación de cajeros.
+     *
+     * @param b true para hacer visible la ventana, false en caso contrario
+     */
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Crear Cajero");
         frame.setContentPane(mainPanel1);
@@ -174,6 +213,11 @@ public class cajerosCreacion extends JFrame {
         frame.setVisible(b);
     }
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new cajerosCreacion().setVisible(true));
     }
