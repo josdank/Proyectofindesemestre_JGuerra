@@ -5,6 +5,8 @@ import miniMarket.estilos.estilos;
 
 import javax.swing.*;
 import java.awt.*;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -16,6 +18,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class stock extends JFrame {
     public JPanel mainPanel2;
@@ -57,6 +61,10 @@ public class stock extends JFrame {
     private JButton volver;
 
     private int[] cantidades = new int[8];
+    private List<JLabel> dynamicProductLabels = new ArrayList<>();
+    private List<JLabel> dynamicQuantityLabels = new ArrayList<>();
+    private List<JButton> dynamicIncrementButtons = new ArrayList<>();
+    private List<JButton> dynamicDecrementButtons = new ArrayList<>();
 
     public stock() {
         // Configuración de imágenes
@@ -70,19 +78,11 @@ public class stock extends JFrame {
         setLabelImage(vino, "src/vino.jpg");
 
         inicializarCantidades();
+        inicializarComponentesDinamicos();
 
         // Aplica estilos
         estilos.aplicarColorDeFondo(mainPanel2);
-        estilos.aplicarEstilos(huevos);
-        estilos.aplicarEstilos(leche);
-        estilos.aplicarEstilos(fideos);
-        estilos.aplicarEstilos(azucar);
-        estilos.aplicarEstilos(pan);
-        estilos.aplicarEstilos(arroz);
-        estilos.aplicarEstilos(embutidos);
-        estilos.aplicarEstilos(vino);
-        estilos.aplicarEstilos2(productos);
-        estilos.aplicarEstilos2(añadirStockButton);
+        aplicarEstilosComponentesEstaticos();
 
         // Acciones de incremento
         button1.addActionListener(e -> incrementarCantidad(0, cantidad1));
@@ -141,6 +141,80 @@ public class stock extends JFrame {
         });
     }
 
+    private void inicializarComponentesDinamicos() {
+        // Implementar la lógica para inicializar componentes dinámicos desde la base de datos
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String query = "SELECT * FROM productos WHERE nombre NOT IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            int row = 3; // Starting row for dynamic components
+            int col = 0; // Starting column for dynamic components
+
+            while (resultSet.next()) {
+                String nombre = resultSet.getString("nombre");
+                int cantidad = resultSet.getInt("cantidad");
+                double precio = resultSet.getDouble("precio");
+                String imagen = resultSet.getString("imagen");
+
+                JLabel nameLabel = new JLabel(nombre + " - $" + precio);
+                GridConstraints nameConstraints = new GridConstraints(row, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel2.add(nameLabel, nameConstraints);
+
+                JLabel productLabel = new JLabel();
+                setLabelImage(productLabel, imagen);
+                GridConstraints productConstraints = new GridConstraints(row + 1, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel2.add(productLabel, productConstraints);
+                estilos.aplicarEstilos(productLabel);
+
+                JButton incrementButton = new JButton("+");
+                GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel2.add(incrementButton, incrementConstraints);
+
+
+                JButton decrementButton = new JButton("-");
+                GridConstraints decrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel2.add(decrementButton, decrementConstraints);
+
+
+                JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
+                GridConstraints quantityConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel2.add(quantityLabel, quantityConstraints);
+
+
+                incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
+                decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
+
+                dynamicProductLabels.add(productLabel);
+                dynamicQuantityLabels.add(quantityLabel);
+                dynamicIncrementButtons.add(incrementButton);
+                dynamicDecrementButtons.add(decrementButton);
+
+                col++;
+                if (col == 4) { // Assuming 4 columns per row
+                    col = 4;
+                    row += 1; // Move to the next row, keeping space between groups
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void aplicarEstilosComponentesEstaticos() {
+        estilos.aplicarEstilos(huevos);
+        estilos.aplicarEstilos(leche);
+        estilos.aplicarEstilos(fideos);
+        estilos.aplicarEstilos(azucar);
+        estilos.aplicarEstilos(pan);
+        estilos.aplicarEstilos(arroz);
+        estilos.aplicarEstilos(embutidos);
+        estilos.aplicarEstilos(vino);
+        estilos.aplicarEstilos2(productos);
+        estilos.aplicarEstilos2(añadirStockButton);
+    }
+
     private void setLabelImage(JLabel label, String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
         icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
@@ -156,6 +230,20 @@ public class stock extends JFrame {
         if (cantidades[index] > 0) {
             cantidades[index]--;
             cantidadLabel.setText(String.valueOf(cantidades[index]));
+        }
+    }
+
+    private void incrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
+        int cantidad = Integer.parseInt(cantidadLabel.getText());
+        cantidad++;
+        cantidadLabel.setText(String.valueOf(cantidad));
+    }
+
+    private void decrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
+        int cantidad = Integer.parseInt(cantidadLabel.getText());
+        if (cantidad > 0) {
+            cantidad--;
+            cantidadLabel.setText(String.valueOf(cantidad));
         }
     }
 
@@ -337,12 +425,58 @@ public class stock extends JFrame {
                 stockStatement.executeUpdate();
 
                 JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
+
+                // Añadir el nuevo producto a la interfaz
+                añadirProductoInterfaz(nombre, Double.parseDouble(precio), imagenPath, Integer.parseInt(cantidad));
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Error al agregar el producto en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
         }
     }
+
+    private int row = 3; // Starting row for dynamic components
+    private int col = 0; // Starting column for dynamic components
+
+    private void añadirProductoInterfaz(String nombre, double precio, String imagen, int cantidad) {
+        JLabel nameLabel = new JLabel(nombre + " - $" + precio);
+        GridConstraints nameConstraints = new GridConstraints(row, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+        mainPanel2.add(nameLabel, nameConstraints);
+
+        JLabel productLabel = new JLabel();
+        setLabelImage(productLabel, imagen);
+        GridConstraints productConstraints = new GridConstraints(row + 1, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+        mainPanel2.add(productLabel, productConstraints);
+        estilos.aplicarEstilos(productLabel);
+
+        JButton incrementButton = new JButton("+");
+        GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+        mainPanel2.add(incrementButton, incrementConstraints);
+
+        JButton decrementButton = new JButton("-");
+        GridConstraints decrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+        mainPanel2.add(decrementButton, decrementConstraints);
+
+        JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
+        GridConstraints quantityConstraints = new GridConstraints(row + 3, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+        mainPanel2.add(quantityLabel, quantityConstraints);
+
+        incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
+        decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
+
+        dynamicProductLabels.add(productLabel);
+        dynamicQuantityLabels.add(quantityLabel);
+        dynamicIncrementButtons.add(incrementButton);
+        dynamicDecrementButtons.add(decrementButton);
+
+        row++;
+        if (row == 1) { // Assuming 1 column per row
+            row = 0;
+            col = (col == 0) ? 1 : 0; // Toggle row between 0 and 1
+        }
+    }
+
 
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Stock");

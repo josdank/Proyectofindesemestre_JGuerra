@@ -105,8 +105,8 @@ public class facturacion extends JFrame {
     }
 
     private void enviarCorreo(String destinatario) {
-        String remitente = "tu_correo@gmail.com";
-        String clave = "tu_contraseña";
+        String remitente = "jguerralovato@gmail.com";
+        String clave = "swordart1234";
         String asunto = "Factura de compra";
         String mensaje = "Adjunto encontrará la factura de su compra.";
 

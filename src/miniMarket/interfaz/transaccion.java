@@ -157,8 +157,8 @@ public class transaccion extends JFrame {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            int row = 3; // Starting row for dynamic components
-            int col = 0; // Starting column for dynamic components
+            int row = 3;
+            int col = 0;
 
             while (resultSet.next()) {
                 String nombre = resultSet.getString("nombre");
@@ -188,7 +188,7 @@ public class transaccion extends JFrame {
 
 
                 JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
-                GridConstraints quantityConstraints = new GridConstraints(row + 3, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                GridConstraints quantityConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(quantityLabel, quantityConstraints);
 
 
@@ -201,9 +201,9 @@ public class transaccion extends JFrame {
                 dynamicDecrementButtons.add(decrementButton);
 
                 col++;
-                if (col >= 4) { // Assuming 4 columns per row
+                if (col == 1) {
                     col = 0;
-                    row += 4; // Move to the next row, keeping space between groups
+                    row = (row == 0) ? 1 : 0;
                 }
             }
         } catch (SQLException ex) {
