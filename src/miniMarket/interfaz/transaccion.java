@@ -103,7 +103,7 @@ public class transaccion extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     realizarCompra();
-                    JOptionPane.showMessageDialog(transaccion.this, "Compra realizada con éxito.");
+                    JOptionPane.showMessageDialog(transaccion.this, "Transacción realizada con éxito.\nPrecio total: $" + precioTotal);
                     // Redirigir a la facturación
                     redirigirAFacturacion();
                 } catch (SQLException ex) {
@@ -170,7 +170,6 @@ public class transaccion extends JFrame {
                 GridConstraints nameConstraints = new GridConstraints(row, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(nameLabel, nameConstraints);
 
-
                 JLabel productLabel = new JLabel();
                 setLabelImage(productLabel, imagen);
                 GridConstraints productConstraints = new GridConstraints(row + 1, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
@@ -181,16 +180,13 @@ public class transaccion extends JFrame {
                 GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(incrementButton, incrementConstraints);
 
-
                 JButton decrementButton = new JButton("-");
                 GridConstraints decrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(decrementButton, decrementConstraints);
 
-
                 JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
                 GridConstraints quantityConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(quantityLabel, quantityConstraints);
-
 
                 incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
                 decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
@@ -407,7 +403,8 @@ public class transaccion extends JFrame {
 
     private void redirigirAFacturacion() {
         JFrame frame = new JFrame("Facturación");
-        frame.setContentPane(new facturacion().mainPanel4);
+        facturacion facturacionPanel = new facturacion(productosVendidos, precioTotal);
+        frame.setContentPane(facturacionPanel.mainPanel4);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);

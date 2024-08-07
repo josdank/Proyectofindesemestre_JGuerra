@@ -4,23 +4,31 @@ import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.interfaz.clases.Usuario;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class facturacion extends JFrame {
     public JPanel mainPanel4;
@@ -36,9 +44,12 @@ public class facturacion extends JFrame {
     private JComboBox<String> comboBox1;
     private JLabel img2;
     private Usuario cashier;
+    private List<String> productosVendidos;
+    private double precioTotal;
 
-    public facturacion() {
-        this.cashier = cashier;
+    public facturacion(List<String> productosVendidos, double precioTotal) {
+        this.productosVendidos = productosVendidos;
+        this.precioTotal = precioTotal;
 
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
         icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
@@ -54,14 +65,15 @@ public class facturacion extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (validarCampos()) {
                     try {
-                        double total = Double.parseDouble(pago.getText());
+                        double total = precioTotal;
                         String metodoPago = (String) comboBox1.getSelectedItem();
                         if (metodoPago.equals("Tarjeta")) {
                             total *= 1.10; // Añadir 10% al total
                         }
-                        generarPDF(total);
-                        enviarCorreo(correo.getText());
-                        guardarEnBaseDeDatos();
+                        String pdfPath = generarPDF(total);
+                        String xmlPath = generarXML();
+                        enviarCorreo(correo.getText(), pdfPath);
+                        guardarEnBaseDeDatos(pdfPath, xmlPath);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -70,27 +82,37 @@ public class facturacion extends JFrame {
                 }
             }
         });
+
+        setContentPane(mainPanel4);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
     }
 
     private boolean validarCampos() {
         if (usuario.getText().isEmpty() || cedula.getText().isEmpty() || correo.getText().isEmpty() ||
-                pago.getText().isEmpty() || fecha.getText().isEmpty() || direccion.getText().isEmpty()) {
+                fecha.getText().isEmpty() || direccion.getText().isEmpty()) {
             return false;
+        } else {
+            if (!cedula.getText().matches("\\d{10}")) {
+                JOptionPane.showMessageDialog(this, "La cédula debe tener 10 dígitos.");
+                return false;
+            }
+            if (!correo.getText().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                JOptionPane.showMessageDialog(this, "El correo electrónico no tiene un formato válido.");
+                return false;
+            }
+            if (comboBox1.getSelectedItem() == null || comboBox1.getSelectedItem().toString().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un método de pago.");
+                return false;
+            }
+            return true;
         }
-        if (!cedula.getText().matches("\\d{10}")) {
-            JOptionPane.showMessageDialog(this, "La cédula debe tener 10 dígitos.");
-            return false;
-        }
-        if (!correo.getText().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            JOptionPane.showMessageDialog(this, "El correo electrónico no tiene un formato válido.");
-            return false;
-        }
-        return true;
     }
 
-    private void generarPDF(double total) throws DocumentException, IOException {
+    private String generarPDF(double total) throws DocumentException, IOException {
         Document document = new Document();
-        String fileName = "Factura_" + UUID.randomUUID() + ".pdf";
+        String fileName = "src/facturas/Factura_" + UUID.randomUUID() + ".pdf";
         PdfWriter.getInstance(document, new FileOutputStream(fileName));
         document.open();
         document.add(new Paragraph("Pedido"));
@@ -100,11 +122,65 @@ public class facturacion extends JFrame {
         document.add(new Paragraph("Cédula: " + cedula.getText()));
         document.add(new Paragraph("Correo: " + correo.getText()));
         document.add(new Paragraph("Descripción: Compra de productos"));
+        document.add(new Paragraph("Productos:"));
+        for (String producto : productosVendidos) {
+            document.add(new Paragraph("  - " + producto));
+        }
         document.add(new Paragraph("Total: " + total));
         document.close();
+        return fileName;
     }
 
-    private void enviarCorreo(String destinatario) {
+    private String generarXML() throws ParserConfigurationException, TransformerException, FileNotFoundException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        org.w3c.dom.Document doc = docBuilder.newDocument();
+        org.w3c.dom.Element rootElement = doc.createElement("factura");
+        doc.appendChild(rootElement);
+
+        org.w3c.dom.Element nombre = doc.createElement("nombre");
+        nombre.appendChild(doc.createTextNode(usuario.getText()));
+        rootElement.appendChild(nombre);
+
+        org.w3c.dom.Element direccionElem = doc.createElement("direccion");
+        direccionElem.appendChild(doc.createTextNode(direccion.getText()));
+        rootElement.appendChild(direccionElem);
+
+        org.w3c.dom.Element cedulaElem = doc.createElement("cedula");
+        cedulaElem.appendChild(doc.createTextNode(cedula.getText()));
+        rootElement.appendChild(cedulaElem);
+
+        org.w3c.dom.Element correoElem = doc.createElement("correo");
+        correoElem.appendChild(doc.createTextNode(correo.getText()));
+        rootElement.appendChild(correoElem);
+
+        org.w3c.dom.Element fechaElem = doc.createElement("fecha");
+        fechaElem.appendChild(doc.createTextNode(fecha.getText()));
+        rootElement.appendChild(fechaElem);
+
+        org.w3c.dom.Element productosElem = doc.createElement("productos");
+        for (String producto : productosVendidos) {
+            org.w3c.dom.Element productoElem = doc.createElement("producto");
+            productoElem.appendChild(doc.createTextNode(producto));
+            productosElem.appendChild(productoElem);
+        }
+        rootElement.appendChild(productosElem);
+
+        org.w3c.dom.Element totalElem = doc.createElement("total");
+        totalElem.appendChild(doc.createTextNode(String.valueOf(precioTotal)));
+        rootElement.appendChild(totalElem);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        String fileName = "src/facturas/Factura_" + UUID.randomUUID() + ".xml";
+        StreamResult result = new StreamResult(new FileOutputStream(fileName));
+
+        transformer.transform(source, result);
+        return fileName;
+    }
+
+    private void enviarCorreo(String destinatario, String pdfPath) {
         String remitente = "jguerralovato@gmail.com";
         String clave = "swordart1234";
         String asunto = "Factura de compra";
@@ -128,7 +204,7 @@ public class facturacion extends JFrame {
             BodyPart texto = new MimeBodyPart();
             texto.setText(mensaje);
             BodyPart adjunto = new MimeBodyPart();
-            adjunto.setDataHandler(new DataHandler(new FileDataSource("Factura.pdf")));
+            adjunto.setDataHandler(new DataHandler(new FileDataSource(pdfPath)));
             adjunto.setFileName("Factura.pdf");
             MimeMultipart multiParte = new MimeMultipart();
             multiParte.addBodyPart(texto);
@@ -143,8 +219,8 @@ public class facturacion extends JFrame {
         }
     }
 
-    private void guardarEnBaseDeDatos() {
-        String query = "INSERT INTO facturas (usuario, cedula, correo, pago, fecha, direccion, metodo_pago) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private void guardarEnBaseDeDatos(String pdfPath, String xmlPath) {
+        String query = "INSERT INTO facturas (usuario, cedula, correo, pago, fecha, direccion, metodo_pago, pdf_path, xml_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -155,6 +231,8 @@ public class facturacion extends JFrame {
             stmt.setString(5, fecha.getText());
             stmt.setString(6, direccion.getText());
             stmt.setString(7, (String) comboBox1.getSelectedItem());
+            stmt.setString(8, pdfPath);
+            stmt.setString(9, xmlPath);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,7 +241,7 @@ public class facturacion extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            facturacion frame = new facturacion();
+            facturacion frame = new facturacion(new ArrayList<>(), 0.0);
             frame.setContentPane(frame.mainPanel4);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
