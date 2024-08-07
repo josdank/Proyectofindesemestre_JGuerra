@@ -66,14 +66,17 @@ public class transaccion extends JFrame {
     public transaccion(int cajeroId) {
         this.cajeroId = cajeroId;
 
-        mainPanel6.setLayout(new GridLayoutManager(20, 4, new Insets(10, 10, 10, 10), -1, -1));
-
         inicializarComponentesEstaticos();
         inicializarComponentesDinamicos();
 
         // Aplica estilos
         estilos.aplicarColorDeFondo(mainPanel6);
         aplicarEstilosComponentesEstaticos();
+
+        // Añadir JScrollPane
+        JScrollPane scrollPane = new JScrollPane(mainPanel6);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        setContentPane(scrollPane);
 
         // Acciones de incremento y decremento para componentes estáticos
         button1.addActionListener(e -> incrementarCantidad(0, cantidad1));
@@ -126,8 +129,6 @@ public class transaccion extends JFrame {
             }
         });
 
-        JScrollPane scrollPane = new JScrollPane(mainPanel6);
-        setContentPane(scrollPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
@@ -156,7 +157,7 @@ public class transaccion extends JFrame {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            int row = 2; // Starting row for dynamic components
+            int row = 3; // Starting row for dynamic components
             int col = 0; // Starting column for dynamic components
 
             while (resultSet.next()) {
@@ -169,24 +170,30 @@ public class transaccion extends JFrame {
                 GridConstraints nameConstraints = new GridConstraints(row, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(nameLabel, nameConstraints);
 
+
                 JLabel productLabel = new JLabel();
                 setLabelImage(productLabel, imagen);
                 GridConstraints productConstraints = new GridConstraints(row + 1, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(productLabel, productConstraints);
+                estilos.aplicarEstilos(productLabel);
+
+                JButton incrementButton = new JButton("+");
+                GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(incrementButton, incrementConstraints);
+
+
+                JButton decrementButton = new JButton("-");
+                GridConstraints decrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
+                mainPanel6.add(decrementButton, decrementConstraints);
+
 
                 JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
                 GridConstraints quantityConstraints = new GridConstraints(row + 3, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(quantityLabel, quantityConstraints);
 
-                JButton incrementButton = new JButton("+");
-                incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
-                GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
-                mainPanel6.add(incrementButton, incrementConstraints);
 
-                JButton decrementButton = new JButton("-");
+                incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
                 decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
-                GridConstraints decrementConstraints = new GridConstraints(row + 2, col + 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
-                mainPanel6.add(decrementButton, decrementConstraints);
 
                 dynamicProductLabels.add(productLabel);
                 dynamicQuantityLabels.add(quantityLabel);
@@ -196,7 +203,7 @@ public class transaccion extends JFrame {
                 col++;
                 if (col >= 4) { // Assuming 4 columns per row
                     col = 0;
-                    row += 5; // Move to the next row, keeping space between groups
+                    row += 4; // Move to the next row, keeping space between groups
                 }
             }
         } catch (SQLException ex) {

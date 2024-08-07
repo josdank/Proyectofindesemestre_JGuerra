@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class estilos {
-    public static void aplicarEstilos(JPanel panel) {
+    public static void aplicarEstilos(JButton panel) {
         panel.setBorder(new RoundedBorder(15, Color.BLACK));
     }
 
