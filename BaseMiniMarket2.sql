@@ -14,7 +14,6 @@ select * from usuarios;
 SET SQL_SAFE_UPDATES = 0;
 DELETE FROM usuarios WHERE id = 8;
 SET SQL_SAFE_UPDATES = 1;
-INSERT INTO usuarios (username, password, role) VALUES ('cajero1', 'password1', 'Cajero');
 INSERT INTO usuarios (username, password, role) VALUES ('admin1', 'password1', 'Admin');
 
 CREATE TABLE cajeros (
@@ -25,9 +24,6 @@ CREATE TABLE cajeros (
     telefono VARCHAR(16) NOT NULL
 );
 select * from cajeros;
-SET SQL_SAFE_UPDATES = 0;
-DELETE FROM cajeros WHERE usuario = 'cajero2';
-SET SQL_SAFE_UPDATES = 1;
 
 CREATE TABLE productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,9 +34,7 @@ CREATE TABLE productos (
 );
 select * from productos;
 select * from stock;
-SET SQL_SAFE_UPDATES = 0;
-DELETE FROM productos WHERE nombre = 'Habas';
-SET SQL_SAFE_UPDATES = 1;
+
 CREATE TABLE ventas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(10, 2) NOT NULL,
@@ -56,11 +50,15 @@ CREATE TABLE facturas (
     usuario VARCHAR(255) NOT NULL,
     cedula VARCHAR(10) NOT NULL,
     correo VARCHAR(255) NOT NULL,
-    pago DECIMAL(10, 2) NOT NULL,
     fecha DATE NOT NULL,
     direccion VARCHAR(255) NOT NULL,
     metodo_pago VARCHAR(50) NOT NULL
 );
+select*from facturas;
+ALTER TABLE facturas DROP COLUMN pago;
+ALTER TABLE facturas
+ADD COLUMN pdf_path VARCHAR(255),
+ADD COLUMN xml_path VARCHAR(255);
 
 CREATE TABLE stock (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,14 +66,12 @@ CREATE TABLE stock (
     cantidad INT NOT NULL DEFAULT 100
 );
 ALTER TABLE stock ADD COLUMN precio DECIMAL(10, 2) NOT NULL;
-select * from stock;
-TRUNCATE TABLE stock;
+select * from ventas;
+TRUNCATE TABLE usuarios;
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM stock;
+DELETE FROM usuarios;
 SET SQL_SAFE_UPDATES = 1;
-SET SQL_SAFE_UPDATES = 0;
-DELETE FROM stock WHERE nombre = 'Habas';
-SET SQL_SAFE_UPDATES = 1;
+
 
 
 

@@ -1,5 +1,6 @@
 package miniMarket.interfaz;
 
+import miniMarket.interfaz.admin.actividad;
 import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.interfaz.clases.Usuario;
 import javax.swing.*;
@@ -21,7 +22,7 @@ import javax.mail.internet.*;
 import javax.activation.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import com.itextpdf.text.Image;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,6 +42,7 @@ public class facturacion extends JFrame {
     private JTextField direccion;
     private JComboBox<String> comboBox1;
     private JLabel img2;
+    private JButton volver;
     private Usuario cashier;
     private List<String> productosVendidos;
     private double precioTotal;
@@ -91,6 +93,20 @@ public class facturacion extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+        volver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Actividades");
+                frame.setContentPane(new login().mainPanel5);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                JFrame facturacion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel4);
+                facturacion_frame.dispose();
+            }
+        });
     }
 
     private boolean validarCampos() {
@@ -100,14 +116,17 @@ public class facturacion extends JFrame {
         } else {
             if (!cedula.getText().matches("\\d{10}")) {
                 JOptionPane.showMessageDialog(this, "La cédula debe tener 10 dígitos.");
+                cedula.setBorder(BorderFactory.createLineBorder(Color.RED));
                 return false;
             }
             if (!correo.getText().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
                 JOptionPane.showMessageDialog(this, "El correo electrónico no tiene un formato válido.");
+                correo.setBorder(BorderFactory.createLineBorder(Color.RED));
                 return false;
             }
             if (comboBox1.getSelectedItem() == null || comboBox1.getSelectedItem().toString().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Debe seleccionar un método de pago.");
+                comboBox1.setBorder(BorderFactory.createLineBorder(Color.RED));
                 return false;
             }
             return true;

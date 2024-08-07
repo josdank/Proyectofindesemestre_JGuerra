@@ -173,11 +173,19 @@
       </component>
       <component id="c7f92" class="javax.swing.JButton" binding="loginButton" default-binding="true">
         <constraints>
-          <grid row="9" column="5" row-span="1" col-span="6" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="9" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font style="2"/>
           <text value="Login"/>
+        </properties>
+      </component>
+      <component id="5997a" class="javax.swing.JButton" binding="Salir">
+        <constraints>
+          <grid row="9" column="9" row-span="1" col-span="6" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Salir"/>
         </properties>
       </component>
     </children>

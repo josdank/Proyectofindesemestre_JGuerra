@@ -22,6 +22,7 @@ public class login extends JFrame {
     private JLabel img2;
     private JLabel mensaje;
     private JComboBox<String> comboBox1;
+    private JButton Salir;
 
     public login() {
         // Inicializar el comboBox con las opciones requeridas
@@ -77,6 +78,13 @@ public class login extends JFrame {
                 } else {
                     contra.setEchoChar('•');
                 }
+            }
+        });
+        Salir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame facturacion_frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel5);
+                facturacion_frame.dispose();
             }
         });
     }

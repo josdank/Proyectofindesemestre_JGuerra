@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         // Reproducir sonido al iniciar
-        audioPlayer.playSound("ruta/al/archivo/inicio.wav");
+        audioPlayer.playSound("src/Sonido/S.T.A.Y_inicio.wav");
 
         // Crear la ventana de login
         JFrame loginFrame = new JFrame("Login");
@@ -25,7 +25,7 @@ public class Main {
         loginFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                audioPlayer.playSound("ruta/al/archivo/salida.wav");
+                audioPlayer.playSound("src/Sonido/M83_Fin.wav");
             }
         });
     }
