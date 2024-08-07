@@ -22,7 +22,6 @@ import javax.mail.internet.*;
 import javax.activation.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -172,17 +171,26 @@ public class facturacion extends JFrame {
 
         for (String producto : productosVendidos) {
             String[] parts = producto.split(": ");
-            addTableCell(table, parts[0]);  // Código
-            addTableCell(table, parts[1]);  // Descripción
-            addTableCell(table, "1");       // Cantidad
-            addTableCell(table, parts[2]);  // Precio Unitario
-            addTableCell(table, parts[2]);  // Precio Total
+            if (parts.length == 3) {
+                String codigo = parts[0];
+                String cantidad = parts[1];
+                String precioUnitario = parts[2].replace(",", "."); // Reemplazar coma por punto
+                float precioTotal = Float.parseFloat(cantidad) * Float.parseFloat(precioUnitario);
+
+                addTableCell(table, codigo);
+                addTableCell(table, codigo);
+                addTableCell(table, cantidad);
+                addTableCell(table, precioUnitario);
+                addTableCell(table, String.format("%.2f", precioTotal));
+            } else {
+                System.err.println("Formato de producto incorrecto: " + producto);
+            }
         }
 
         document.add(table);
 
         // Total
-        document.add(new Paragraph("Valor Total: $" + total, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+        document.add(new Paragraph("Valor Total: $" + String.format("%.2f", total), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
 
         document.close();
         return fileName;

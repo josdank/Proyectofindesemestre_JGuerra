@@ -103,7 +103,7 @@ public class transaccion extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     realizarCompra();
-                    JOptionPane.showMessageDialog(transaccion.this, "Transacción realizada con éxito.\nPrecio total: $" + precioTotal);
+                    JOptionPane.showMessageDialog(transaccion.this, "Transacción realizada con éxito.\nPrecio total: $" + String.format("%.2f", precioTotal));
                     // Redirigir a la facturación
                     redirigirAFacturacion();
                 } catch (SQLException ex) {
@@ -188,8 +188,8 @@ public class transaccion extends JFrame {
                 GridConstraints quantityConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel6.add(quantityLabel, quantityConstraints);
 
-                incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
-                decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
+                incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre, precio));
+                decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre, precio));
 
                 dynamicProductLabels.add(productLabel);
                 dynamicQuantityLabels.add(quantityLabel);
@@ -238,17 +238,19 @@ public class transaccion extends JFrame {
         }
     }
 
-    private void incrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
+    private void incrementarCantidadDinamica(JLabel cantidadLabel, String nombre, double precio) {
         int cantidad = Integer.parseInt(cantidadLabel.getText());
         cantidad++;
         cantidadLabel.setText(String.valueOf(cantidad));
+        agregarProductoVendido(nombre, cantidad, precio);
     }
 
-    private void decrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
+    private void decrementarCantidadDinamica(JLabel cantidadLabel, String nombre, double precio) {
         int cantidad = Integer.parseInt(cantidadLabel.getText());
         if (cantidad > 0) {
             cantidad--;
             cantidadLabel.setText(String.valueOf(cantidad));
+            agregarProductoVendido(nombre, cantidad, precio);
         }
     }
 
@@ -326,7 +328,7 @@ public class transaccion extends JFrame {
                         updateStmt.setString(2, getNombreProducto(i));
                         updateStmt.executeUpdate();
 
-                        productosVendidos.add(getNombreProducto(i) + ": " + cantidades[i]);
+                        productosVendidos.add(getNombreProducto(i) + ": " + cantidades[i] + ": " + String.format("%.2f", precio));
                         precioTotal += precio * cantidades[i];
                     } else {
                         stockAgotado = true;
@@ -338,6 +340,17 @@ public class transaccion extends JFrame {
         if (!productosVendidos.isEmpty()) {
             guardarVenta();
         }
+    }
+
+    private void agregarProductoVendido(String nombre, int cantidad, double precio) {
+        for (int i = 0; i < productosVendidos.size(); i++) {
+            String[] partes = productosVendidos.get(i).split(": ");
+            if (partes[0].equals(nombre)) {
+                productosVendidos.set(i, nombre + ": " + cantidad + ": " + String.format("%.2f", precio));
+                return;
+            }
+        }
+        productosVendidos.add(nombre + ": " + cantidad + ": " + String.format("%.2f", precio));
     }
 
     private void guardarVenta() throws SQLException {

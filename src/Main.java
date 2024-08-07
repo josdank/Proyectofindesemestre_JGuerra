@@ -6,9 +6,17 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import Sonido.AudioPlayer;
 
+/**
+ * Clase principal para la aplicación MiniMarket.
+ */
 public class Main {
     private static AudioPlayer audioPlayer = new AudioPlayer();
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         // Reproducir sonido al iniciar
         audioPlayer.playSound("src/Sonido/S.T.A.Y_inicio.wav");
@@ -30,4 +38,3 @@ public class Main {
         });
     }
 }
-
