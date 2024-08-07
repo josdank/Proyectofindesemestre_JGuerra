@@ -70,8 +70,14 @@ public class facturacion extends JFrame {
                         }
                         String pdfPath = generarPDF(total);
                         String xmlPath = generarXML();
-                        enviarCorreo(correo.getText(), pdfPath, xmlPath);
+                        boolean emailSent = enviarCorreo(correo.getText(), pdfPath, xmlPath);
                         guardarEnBaseDeDatos(pdfPath, xmlPath);
+
+                        if (emailSent) {
+                            JOptionPane.showMessageDialog(facturacion.this, "El correo se ha enviado correctamente.");
+                        } else {
+                            JOptionPane.showMessageDialog(facturacion.this, "No se ha podido enviar la información, asegúrese de que se insertó bien el correo electrónico.");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -225,11 +231,11 @@ public class facturacion extends JFrame {
         return fileName;
     }
 
-    private void enviarCorreo(String destinatario, String pdfPath, String xmlPath) {
+    private boolean enviarCorreo(String destinatario, String pdfPath, String xmlPath) {
         String remitente = "guerralovatojosue@hotmail.com";
         String clave = "swordart12";  // Cambia esto a tu clave de Hotmail
         String asunto = "Factura de compra";
-        String mensaje = "Adjunto encontrará la factura de su compra.";
+        String mensaje = "Agradecemos su compra en miniMarket SafJos,\nAdjunto encontrará la factura de su compra.\n esperamos tenerlo de vuelta por nuestras instalaciones 😊👍🎇";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.office365.com");
@@ -263,8 +269,10 @@ public class facturacion extends JFrame {
             transport.connect("smtp.office365.com", remitente, clave);
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
+            return true;
         } catch (MessagingException me) {
             me.printStackTrace();
+            return false;
         }
     }
 
