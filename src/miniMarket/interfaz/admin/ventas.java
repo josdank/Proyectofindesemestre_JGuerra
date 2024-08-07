@@ -12,6 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Clase ventas que representa la ventana para revisar las ventas realizadas por los cajeros.
+ */
 public class ventas extends JFrame {
     public JPanel mainPanel3;
     private JButton revisar;
@@ -22,14 +25,18 @@ public class ventas extends JFrame {
     private JTable table1;
     private JButton volver;
 
+    /**
+     * Constructor de la clase ventas.
+     * Configura los iconos, la ventana y las acciones de los botones.
+     */
     public ventas() {
         // Configuración de los iconos de las imágenes
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
+        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
         img1.setIcon(icon);
 
         icon = new ImageIcon("src/channels4_profile.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
+        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
         img2.setIcon(icon);
 
         // Configuración inicial de la ventana y sus componentes
@@ -39,6 +46,7 @@ public class ventas extends JFrame {
         setLocationRelativeTo(null);
         setSize(800, 600); // Ajustar el tamaño de la ventana
 
+        // Acción del botón revisar
         revisar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,6 +58,8 @@ public class ventas extends JFrame {
                 }
             }
         });
+
+        // Acción del botón volver
         volver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,6 +76,11 @@ public class ventas extends JFrame {
         });
     }
 
+    /**
+     * Busca la información del cajero y sus ventas en la base de datos.
+     *
+     * @param cajeroInput el nombre completo o usuario del cajero
+     */
     private void buscarCajeroYVentas(String cajeroInput) {
         Connection connection = null;
         PreparedStatement cajeroStmt = null;
@@ -133,6 +148,11 @@ public class ventas extends JFrame {
         }
     }
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ventas().setVisible(true));
     }

@@ -16,6 +16,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase transaccion que representa la ventana de transacciones de compra en el sistema miniMarket.
+ */
 public class transaccion extends JFrame {
     public JPanel mainPanel6;
     private JLabel huevos;
@@ -63,6 +66,11 @@ public class transaccion extends JFrame {
     private double precioTotal = 0.0;
     private int cajeroId;
 
+    /**
+     * Constructor de la clase transaccion.
+     *
+     * @param cajeroId el identificador del cajero que realiza la transacción
+     */
     public transaccion(int cajeroId) {
         this.cajeroId = cajeroId;
 
@@ -97,7 +105,7 @@ public class transaccion extends JFrame {
         button15.addActionListener(e -> decrementarCantidad(6, cantidad7));
         button16.addActionListener(e -> decrementarCantidad(7, cantidad8));
 
-        // Acción del botón añadir compra en la base de datos
+        // Acción del botón compra
         compra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,6 +143,9 @@ public class transaccion extends JFrame {
         setSize(800, 600); // Ajustar el tamaño de la ventana
     }
 
+    /**
+     * Inicializa los componentes estáticos de la interfaz.
+     */
     private void inicializarComponentesEstaticos() {
         // Configuración de imágenes para componentes estáticos
         setLabelImage(huevos, "src/huevos.jpg");
@@ -149,6 +160,9 @@ public class transaccion extends JFrame {
         inicializarCantidadesEstaticas();
     }
 
+    /**
+     * Inicializa los componentes dinámicos de la interfaz.
+     */
     private void inicializarComponentesDinamicos() {
         // Implementar la lógica para inicializar componentes dinámicos desde la base de datos
         try {
@@ -207,6 +221,9 @@ public class transaccion extends JFrame {
         }
     }
 
+    /**
+     * Aplica estilos a los componentes estáticos.
+     */
     private void aplicarEstilosComponentesEstaticos() {
         estilos.aplicarEstilos(huevos);
         estilos.aplicarEstilos(leche);
@@ -220,17 +237,35 @@ public class transaccion extends JFrame {
         estilos.aplicarEstilos2(compra);
     }
 
+    /**
+     * Configura la imagen de una etiqueta.
+     *
+     * @param label la etiqueta a la que se añadirá la imagen
+     * @param imagePath la ruta de la imagen
+     */
     private void setLabelImage(JLabel label, String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
         icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
         label.setIcon(icon);
     }
 
+    /**
+     * Incrementa la cantidad de un producto estático.
+     *
+     * @param index el índice del producto en el array de cantidades
+     * @param cantidadLabel la etiqueta de cantidad correspondiente
+     */
     private void incrementarCantidad(int index, JLabel cantidadLabel) {
         cantidades[index]++;
         cantidadLabel.setText(String.valueOf(cantidades[index]));
     }
 
+    /**
+     * Decrementa la cantidad de un producto estático.
+     *
+     * @param index el índice del producto en el array de cantidades
+     * @param cantidadLabel la etiqueta de cantidad correspondiente
+     */
     private void decrementarCantidad(int index, JLabel cantidadLabel) {
         if (cantidades[index] > 0) {
             cantidades[index]--;
@@ -238,6 +273,13 @@ public class transaccion extends JFrame {
         }
     }
 
+    /**
+     * Incrementa la cantidad de un producto dinámico.
+     *
+     * @param cantidadLabel la etiqueta de cantidad correspondiente
+     * @param nombre el nombre del producto
+     * @param precio el precio del producto
+     */
     private void incrementarCantidadDinamica(JLabel cantidadLabel, String nombre, double precio) {
         int cantidad = Integer.parseInt(cantidadLabel.getText());
         cantidad++;
@@ -245,6 +287,13 @@ public class transaccion extends JFrame {
         agregarProductoVendido(nombre, cantidad, precio);
     }
 
+    /**
+     * Decrementa la cantidad de un producto dinámico.
+     *
+     * @param cantidadLabel la etiqueta de cantidad correspondiente
+     * @param nombre el nombre del producto
+     * @param precio el precio del producto
+     */
     private void decrementarCantidadDinamica(JLabel cantidadLabel, String nombre, double precio) {
         int cantidad = Integer.parseInt(cantidadLabel.getText());
         if (cantidad > 0) {
@@ -254,8 +303,10 @@ public class transaccion extends JFrame {
         }
     }
 
+    /**
+     * Inicializa las cantidades de los productos estáticos desde la base de datos.
+     */
     private void inicializarCantidadesEstaticas() {
-        // Código para inicializar las cantidades de productos estáticos desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
             String query = "SELECT * FROM stock WHERE nombre IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
@@ -305,6 +356,11 @@ public class transaccion extends JFrame {
         }
     }
 
+    /**
+     * Realiza la compra y actualiza la base de datos.
+     *
+     * @throws SQLException si ocurre un error en la base de datos
+     */
     private void realizarCompra() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String queryUpdate = "UPDATE stock SET cantidad = ? WHERE nombre = ?";
@@ -342,6 +398,13 @@ public class transaccion extends JFrame {
         }
     }
 
+    /**
+     * Agrega un producto vendido a la lista de productos vendidos.
+     *
+     * @param nombre el nombre del producto
+     * @param cantidad la cantidad del producto
+     * @param precio el precio del producto
+     */
     private void agregarProductoVendido(String nombre, int cantidad, double precio) {
         for (int i = 0; i < productosVendidos.size(); i++) {
             String[] partes = productosVendidos.get(i).split(": ");
@@ -353,6 +416,11 @@ public class transaccion extends JFrame {
         productosVendidos.add(nombre + ": " + cantidad + ": " + String.format("%.2f", precio));
     }
 
+    /**
+     * Guarda la venta en la base de datos.
+     *
+     * @throws SQLException si ocurre un error en la base de datos
+     */
     private void guardarVenta() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = "INSERT INTO ventas (precio_total, productos_vendidos, precio_por_producto, cajero_id) VALUES (?, ?, ?, ?)";
@@ -366,6 +434,11 @@ public class transaccion extends JFrame {
         preparedStatement.executeUpdate();
     }
 
+    /**
+     * Obtiene los precios por producto en formato de cadena.
+     *
+     * @return una cadena con los precios por producto
+     */
     private String obtenerPreciosPorProducto() {
         StringBuilder precios = new StringBuilder();
         for (String producto : productosVendidos) {
@@ -375,6 +448,12 @@ public class transaccion extends JFrame {
         return precios.toString();
     }
 
+    /**
+     * Obtiene el precio de un producto desde la base de datos.
+     *
+     * @param nombreProducto el nombre del producto
+     * @return el precio del producto
+     */
     private double obtenerPrecioProducto(String nombreProducto) {
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -391,6 +470,12 @@ public class transaccion extends JFrame {
         return 0.0;
     }
 
+    /**
+     * Obtiene el nombre del producto basado en su índice.
+     *
+     * @param index el índice del producto
+     * @return el nombre del producto
+     */
     private String getNombreProducto(int index) {
         switch (index) {
             case 0:
@@ -414,6 +499,9 @@ public class transaccion extends JFrame {
         }
     }
 
+    /**
+     * Redirige a la ventana de facturación.
+     */
     private void redirigirAFacturacion() {
         JFrame frame = new JFrame("Facturación");
         facturacion facturacionPanel = new facturacion(productosVendidos, precioTotal);
@@ -427,6 +515,11 @@ public class transaccion extends JFrame {
         transaccion_frame.dispose();
     }
 
+    /**
+     * Configura la visibilidad de la ventana de transacción.
+     *
+     * @param b true para hacer visible la ventana, false para ocultarla
+     */
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Transaccion");
         frame.setContentPane(mainPanel6);
@@ -436,10 +529,20 @@ public class transaccion extends JFrame {
         frame.setVisible(b);
     }
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new transaccion(1).setVisible(true)); // El ID del cajero debe ser pasado aquí
     }
 
+    /**
+     * Obtiene el contenedor principal de la ventana de transacción.
+     *
+     * @return el contenedor principal de la ventana
+     */
     public Container getMainPanel6() {
         return mainPanel6;
     }

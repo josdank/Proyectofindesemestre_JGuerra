@@ -85,7 +85,7 @@ public class cajerosCreacion extends JFrame {
                 } else {
                     try {
                         crearCajeroEnBaseDeDatos(nombre.getText(), usuario.getText(), new String(password.getPassword()), ntelefono.getText());
-                        enviarMensajeWhatsApp(ntelefono.getText(), "Su usuario: " + usuario.getText() + " y su contraseña: " + new String(password.getPassword()));
+                        enviarMensajeWhatsApp(ntelefono.getText(), "Agradecemos que trabaje con nosotros,🎇🎊😊 a continuación le presentamos las credenciales para su acceso Su usuario: " + usuario.getText() + " y su contraseña: " + new String(password.getPassword()));
                         JOptionPane.showMessageDialog(cajerosCreacion.this, "Cajero creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(cajerosCreacion.this, "Error al crear el cajero en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);

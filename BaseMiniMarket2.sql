@@ -67,9 +67,9 @@ CREATE TABLE stock (
 );
 ALTER TABLE stock ADD COLUMN precio DECIMAL(10, 2) NOT NULL;
 select * from stock;
-TRUNCATE TABLE ventas;
+TRUNCATE TABLE usuarios;
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM ventas;
+DELETE FROM usuarios;
 SET SQL_SAFE_UPDATES = 1;
 
 

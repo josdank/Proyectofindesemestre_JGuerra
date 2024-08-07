@@ -12,6 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Clase login que representa la ventana de inicio de sesión para los usuarios del sistema miniMarket.
+ */
 public class login extends JFrame {
     public JPanel mainPanel5;
     private JPasswordField contra;
@@ -24,6 +27,10 @@ public class login extends JFrame {
     private JComboBox<String> comboBox1;
     private JButton Salir;
 
+    /**
+     * Constructor de la clase login.
+     * Inicializa los componentes de la interfaz gráfica y define las acciones de los botones.
+     */
     public login() {
         // Inicializar el comboBox con las opciones requeridas
         comboBox1.addItem(" ");
@@ -38,6 +45,7 @@ public class login extends JFrame {
         icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
         img2.setIcon(icon);
 
+        // Acción del botón loginButton
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,7 +77,7 @@ public class login extends JFrame {
             }
         });
 
-
+        // Acción del botón mostrarContraseñaRadioButton
         mostrarContraseñaRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,6 +88,8 @@ public class login extends JFrame {
                 }
             }
         });
+
+        // Acción del botón Salir
         Salir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,6 +99,14 @@ public class login extends JFrame {
         });
     }
 
+    /**
+     * Autentica las credenciales del usuario contra la base de datos.
+     *
+     * @param username el nombre de usuario
+     * @param password la contraseña del usuario
+     * @param role el rol del usuario
+     * @return un objeto Usuario si las credenciales son válidas, null en caso contrario
+     */
     private Usuario authenticate(String username, String password, String role) {
         String query = "SELECT * FROM usuarios WHERE username = ? AND password = ? AND role = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -108,6 +126,11 @@ public class login extends JFrame {
         return null;
     }
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             login loginFrame = new login();
@@ -116,7 +139,6 @@ public class login extends JFrame {
             loginFrame.pack();
             loginFrame.setLocationRelativeTo(null);
             loginFrame.setVisible(true);
-
         });
     }
 }

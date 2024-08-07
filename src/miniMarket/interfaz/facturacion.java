@@ -29,6 +29,9 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+/**
+ * Clase facturacion que representa la ventana para la generación y envío de facturas.
+ */
 public class facturacion extends JFrame {
     public JPanel mainPanel4;
     private JTextField usuario;
@@ -46,6 +49,12 @@ public class facturacion extends JFrame {
     private List<String> productosVendidos;
     private double precioTotal;
 
+    /**
+     * Constructor de la clase facturacion.
+     *
+     * @param productosVendidos lista de productos vendidos
+     * @param precioTotal precio total de la venta
+     */
     public facturacion(List<String> productosVendidos, double precioTotal) {
         this.productosVendidos = productosVendidos;
         this.precioTotal = precioTotal;
@@ -92,6 +101,8 @@ public class facturacion extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+
+        // Acción del botón volver
         volver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,6 +119,11 @@ public class facturacion extends JFrame {
         });
     }
 
+    /**
+     * Valida los campos de entrada en el formulario.
+     *
+     * @return true si todos los campos son válidos, false en caso contrario
+     */
     private boolean validarCampos() {
         if (usuario.getText().isEmpty() || cedula.getText().isEmpty() || correo.getText().isEmpty() ||
                 fecha.getText().isEmpty() || direccion.getText().isEmpty()) {
@@ -132,6 +148,14 @@ public class facturacion extends JFrame {
         }
     }
 
+    /**
+     * Genera un archivo PDF de la factura.
+     *
+     * @param total el total de la factura
+     * @return la ruta del archivo PDF generado
+     * @throws DocumentException si ocurre un error al crear el documento PDF
+     * @throws IOException si ocurre un error al escribir el archivo PDF
+     */
     private String generarPDF(double total) throws DocumentException, IOException {
         Document document = new Document();
         String fileName = "src/facturas/Factura_" + UUID.randomUUID() + ".pdf";
@@ -196,6 +220,12 @@ public class facturacion extends JFrame {
         return fileName;
     }
 
+    /**
+     * Añade un encabezado a la tabla del PDF.
+     *
+     * @param table la tabla a la que se añadirá el encabezado
+     * @param headerTitle el título del encabezado
+     */
     private void addTableHeader(PdfPTable table, String headerTitle) {
         PdfPCell header = new PdfPCell();
         header.setBorderWidth(2);
@@ -203,12 +233,26 @@ public class facturacion extends JFrame {
         table.addCell(header);
     }
 
+    /**
+     * Añade una celda a la tabla del PDF.
+     *
+     * @param table la tabla a la que se añadirá la celda
+     * @param cellValue el valor de la celda
+     */
     private void addTableCell(PdfPTable table, String cellValue) {
         PdfPCell cell = new PdfPCell();
         cell.setPhrase(new Phrase(cellValue));
         table.addCell(cell);
     }
 
+    /**
+     * Genera un archivo XML de la factura.
+     *
+     * @return la ruta del archivo XML generado
+     * @throws ParserConfigurationException si ocurre un error al configurar el parser XML
+     * @throws TransformerException si ocurre un error al transformar el documento XML
+     * @throws FileNotFoundException si no se encuentra el archivo para escribir el XML
+     */
     private String generarXML() throws ParserConfigurationException, TransformerException, FileNotFoundException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -258,6 +302,14 @@ public class facturacion extends JFrame {
         return fileName;
     }
 
+    /**
+     * Envía un correo electrónico con la factura adjunta.
+     *
+     * @param destinatario el destinatario del correo
+     * @param pdfPath la ruta del archivo PDF adjunto
+     * @param xmlPath la ruta del archivo XML adjunto
+     * @return true si el correo se envía correctamente, false en caso contrario
+     */
     private boolean enviarCorreo(String destinatario, String pdfPath, String xmlPath) {
         String remitente = "guerralovatojosue@hotmail.com";
         String clave = "swordart12";  // Cambia esto a tu clave de Hotmail
@@ -303,6 +355,12 @@ public class facturacion extends JFrame {
         }
     }
 
+    /**
+     * Guarda la información de la factura en la base de datos.
+     *
+     * @param pdfPath la ruta del archivo PDF de la factura
+     * @param xmlPath la ruta del archivo XML de la factura
+     */
     private void guardarEnBaseDeDatos(String pdfPath, String xmlPath) {
         String query = "INSERT INTO facturas (usuario, cedula, correo, fecha, direccion, metodo_pago, pdf_path, xml_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -322,6 +380,11 @@ public class facturacion extends JFrame {
         }
     }
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             facturacion frame = new facturacion(new ArrayList<>(), 0.0);

@@ -21,6 +21,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase stock que representa la ventana para la gestión del stock de productos.
+ */
 public class stock extends JFrame {
     public JPanel mainPanel2;
     private JLabel huevos;
@@ -66,6 +69,10 @@ public class stock extends JFrame {
     private List<JButton> dynamicIncrementButtons = new ArrayList<>();
     private List<JButton> dynamicDecrementButtons = new ArrayList<>();
 
+    /**
+     * Constructor de la clase stock.
+     * Configura las imágenes, inicializa las cantidades, componentes dinámicos y estilos.
+     */
     public stock() {
         // Configuración de imágenes
         setLabelImage(huevos, "src/huevos.jpg");
@@ -141,8 +148,10 @@ public class stock extends JFrame {
         });
     }
 
+    /**
+     * Inicializa los componentes dinámicos desde la base de datos.
+     */
     private void inicializarComponentesDinamicos() {
-        // Implementar la lógica para inicializar componentes dinámicos desde la base de datos
         try {
             Connection connection = DatabaseConnection.getConnection();
             String query = "SELECT * FROM productos WHERE nombre NOT IN ('huevos', 'leche', 'fideos', 'azucar', 'pan', 'arroz', 'embutidos', 'vino')";
@@ -172,16 +181,13 @@ public class stock extends JFrame {
                 GridConstraints incrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel2.add(incrementButton, incrementConstraints);
 
-
                 JButton decrementButton = new JButton("-");
                 GridConstraints decrementConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel2.add(decrementButton, decrementConstraints);
 
-
                 JLabel quantityLabel = new JLabel(String.valueOf(cantidad));
                 GridConstraints quantityConstraints = new GridConstraints(row + 2, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
                 mainPanel2.add(quantityLabel, quantityConstraints);
-
 
                 incrementButton.addActionListener(e -> incrementarCantidadDinamica(quantityLabel, nombre));
                 decrementButton.addActionListener(e -> decrementarCantidadDinamica(quantityLabel, nombre));
@@ -202,6 +208,9 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Aplica estilos a los componentes estáticos.
+     */
     private void aplicarEstilosComponentesEstaticos() {
         estilos.aplicarEstilos(huevos);
         estilos.aplicarEstilos(leche);
@@ -215,17 +224,35 @@ public class stock extends JFrame {
         estilos.aplicarEstilos2(añadirStockButton);
     }
 
+    /**
+     * Establece la imagen de un JLabel.
+     *
+     * @param label el JLabel al que se le asignará la imagen
+     * @param imagePath la ruta de la imagen
+     */
     private void setLabelImage(JLabel label, String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
         icon = new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH));
         label.setIcon(icon);
     }
 
+    /**
+     * Incrementa la cantidad de un producto.
+     *
+     * @param index el índice del producto
+     * @param cantidadLabel el JLabel que muestra la cantidad
+     */
     private void incrementarCantidad(int index, JLabel cantidadLabel) {
         cantidades[index]++;
         cantidadLabel.setText(String.valueOf(cantidades[index]));
     }
 
+    /**
+     * Decrementa la cantidad de un producto.
+     *
+     * @param index el índice del producto
+     * @param cantidadLabel el JLabel que muestra la cantidad
+     */
     private void decrementarCantidad(int index, JLabel cantidadLabel) {
         if (cantidades[index] > 0) {
             cantidades[index]--;
@@ -233,12 +260,24 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Incrementa la cantidad de un producto dinámico.
+     *
+     * @param cantidadLabel el JLabel que muestra la cantidad
+     * @param nombre el nombre del producto
+     */
     private void incrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
         int cantidad = Integer.parseInt(cantidadLabel.getText());
         cantidad++;
         cantidadLabel.setText(String.valueOf(cantidad));
     }
 
+    /**
+     * Decrementa la cantidad de un producto dinámico.
+     *
+     * @param cantidadLabel el JLabel que muestra la cantidad
+     * @param nombre el nombre del producto
+     */
     private void decrementarCantidadDinamica(JLabel cantidadLabel, String nombre) {
         int cantidad = Integer.parseInt(cantidadLabel.getText());
         if (cantidad > 0) {
@@ -247,6 +286,9 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Inicializa las cantidades de los productos desde la base de datos.
+     */
     private void inicializarCantidades() {
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -297,6 +339,11 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Actualiza el stock de productos en la base de datos.
+     *
+     * @throws SQLException si ocurre un error al acceder a la base de datos
+     */
     private void actualizarStockEnBaseDeDatos() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String querySelect = "SELECT cantidad, precio FROM stock WHERE nombre = ?";
@@ -328,6 +375,12 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Obtiene el precio de un producto según su índice.
+     *
+     * @param index el índice del producto
+     * @return el precio del producto
+     */
     private double obtenerPrecioProducto(int index) {
         switch (index) {
             case 0:
@@ -351,6 +404,12 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Obtiene el nombre de un producto según su índice.
+     *
+     * @param index el índice del producto
+     * @return el nombre del producto
+     */
     private String getNombreProducto(int index) {
         switch (index) {
             case 0:
@@ -374,6 +433,9 @@ public class stock extends JFrame {
         }
     }
 
+    /**
+     * Agrega un nuevo producto al sistema.
+     */
     private void agregarNuevoProducto() {
         JTextField nombreField = new JTextField();
         JTextField precioField = new JTextField();
@@ -436,9 +498,17 @@ public class stock extends JFrame {
         }
     }
 
-    private int row = 3; // Starting row for dynamic components
-    private int col = 0; // Starting column for dynamic components
+    private int row = 3;
+    private int col = 0;
 
+    /**
+     * Añade un nuevo producto a la interfaz.
+     *
+     * @param nombre el nombre del producto
+     * @param precio el precio del producto
+     * @param imagen la ruta de la imagen del producto
+     * @param cantidad la cantidad del producto
+     */
     private void añadirProductoInterfaz(String nombre, double precio, String imagen, int cantidad) {
         JLabel nameLabel = new JLabel(nombre + " - $" + precio);
         GridConstraints nameConstraints = new GridConstraints(row, col, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false);
@@ -471,13 +541,17 @@ public class stock extends JFrame {
         dynamicDecrementButtons.add(decrementButton);
 
         row++;
-        if (row == 1) { // Assuming 1 column per row
+        if (row == 1) {
             row = 0;
-            col = (col == 0) ? 1 : 0; // Toggle row between 0 and 1
+            col = (col == 0) ? 1 : 0;
         }
     }
 
-
+    /**
+     * Establece la visibilidad de la ventana de gestión de stock.
+     *
+     * @param b true para hacer visible la ventana, false en caso contrario
+     */
     public void setVisible(boolean b) {
         JFrame frame = new JFrame("Stock");
         frame.setContentPane(mainPanel2);
@@ -487,6 +561,11 @@ public class stock extends JFrame {
         frame.setVisible(b);
     }
 
+    /**
+     * Método principal que inicia la aplicación.
+     *
+     * @param args los argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new stock().setVisible(true));
     }
