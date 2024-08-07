@@ -70,7 +70,7 @@ public class facturacion extends JFrame {
                         }
                         String pdfPath = generarPDF(total);
                         String xmlPath = generarXML();
-                        enviarCorreo(correo.getText(), pdfPath);
+                        enviarCorreo(correo.getText(), pdfPath, xmlPath);
                         guardarEnBaseDeDatos(pdfPath, xmlPath);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -225,7 +225,7 @@ public class facturacion extends JFrame {
         return fileName;
     }
 
-    private void enviarCorreo(String destinatario, String pdfPath) {
+    private void enviarCorreo(String destinatario, String pdfPath, String xmlPath) {
         String remitente = "guerralovatojosue@hotmail.com";
         String clave = "swordart12";  // Cambia esto a tu clave de Hotmail
         String asunto = "Factura de compra";
@@ -248,12 +248,16 @@ public class facturacion extends JFrame {
             message.setSubject(asunto);
             BodyPart texto = new MimeBodyPart();
             texto.setText(mensaje);
-            BodyPart adjunto = new MimeBodyPart();
-            adjunto.setDataHandler(new DataHandler(new FileDataSource(pdfPath)));
-            adjunto.setFileName("Factura.pdf");
+            BodyPart adjuntoPDF = new MimeBodyPart();
+            adjuntoPDF.setDataHandler(new DataHandler(new FileDataSource(pdfPath)));
+            adjuntoPDF.setFileName("Factura.pdf");
+            BodyPart adjuntoXML = new MimeBodyPart();
+            adjuntoXML.setDataHandler(new DataHandler(new FileDataSource(xmlPath)));
+            adjuntoXML.setFileName("Factura.xml");
             MimeMultipart multiParte = new MimeMultipart();
             multiParte.addBodyPart(texto);
-            multiParte.addBodyPart(adjunto);
+            multiParte.addBodyPart(adjuntoPDF);
+            multiParte.addBodyPart(adjuntoXML);
             message.setContent(multiParte);
             Transport transport = session.getTransport("smtp");
             transport.connect("smtp.office365.com", remitente, clave);
