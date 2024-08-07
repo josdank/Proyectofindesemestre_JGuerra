@@ -19,10 +19,9 @@ import java.util.UUID;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.Image;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,7 +37,6 @@ public class facturacion extends JFrame {
     private JButton notaVenta;
     private JTextField cedula;
     private JTextField correo;
-    private JTextField pago;
     private JTextField fecha;
     private JTextField direccion;
     private JComboBox<String> comboBox1;
@@ -52,11 +50,11 @@ public class facturacion extends JFrame {
         this.precioTotal = precioTotal;
 
         ImageIcon icon = new ImageIcon("src/channels4_profile.jpg");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
+        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
         img1.setIcon(icon);
 
-        ImageIcon imageIcon = new ImageIcon("src/channels4_profile.jpg");
-        icon = new ImageIcon(imageIcon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH));
+        icon = new ImageIcon("src/channels4_profile.jpg");
+        icon = new ImageIcon(icon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
         img2.setIcon(icon);
 
         // Configuración del botón notaVenta
@@ -115,20 +113,67 @@ public class facturacion extends JFrame {
         String fileName = "src/facturas/Factura_" + UUID.randomUUID() + ".pdf";
         PdfWriter.getInstance(document, new FileOutputStream(fileName));
         document.open();
-        document.add(new Paragraph("Pedido"));
-        document.add(new Paragraph("Fecha: " + fecha.getText()));
-        document.add(new Paragraph("Nombre: " + usuario.getText()));
-        document.add(new Paragraph("Dirección: " + direccion.getText()));
-        document.add(new Paragraph("Cédula: " + cedula.getText()));
-        document.add(new Paragraph("Correo: " + correo.getText()));
-        document.add(new Paragraph("Descripción: Compra de productos"));
-        document.add(new Paragraph("Productos:"));
+
+        // Información de la factura
+        document.add(new Paragraph("MiniMarket SafJos", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+        document.add(new Paragraph("Dirección Matriz: Ladrón de Guevara E11-253 y Andalucía", FontFactory.getFont(FontFactory.HELVETICA, 10)));
+        document.add(new Paragraph("Contribuyente especial Nro: 1308", FontFactory.getFont(FontFactory.HELVETICA, 10)));
+        document.add(new Paragraph("Obligado a llevar contabilidad: Sí", FontFactory.getFont(FontFactory.HELVETICA, 10)));
+
+        // Espacio
+        document.add(new Paragraph("\n"));
+
+        // Información del cliente
+        document.add(new Paragraph("Razón Social/Nombres y Apellidos: " + usuario.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+        document.add(new Paragraph("Cédula/RUC: " + cedula.getText(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+        document.add(new Paragraph("Fecha: " + fecha.getText(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+        document.add(new Paragraph("Correo Electrónico: " + correo.getText(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+        document.add(new Paragraph("Dirección: " + direccion.getText(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+        document.add(new Paragraph("Forma de Pago: " + comboBox1.getSelectedItem().toString(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+
+        // Espacio
+        document.add(new Paragraph("\n"));
+
+        // Detalle de productos
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{2, 3, 1, 2, 2});
+
+        addTableHeader(table, "Código");
+        addTableHeader(table, "Descripción");
+        addTableHeader(table, "Cantidad");
+        addTableHeader(table, "Precio Unitario");
+        addTableHeader(table, "Precio Total");
+
         for (String producto : productosVendidos) {
-            document.add(new Paragraph("  - " + producto));
+            String[] parts = producto.split(": ");
+            addTableCell(table, parts[0]);  // Código
+            addTableCell(table, parts[1]);  // Descripción
+            addTableCell(table, "1");       // Cantidad
+            addTableCell(table, parts[2]);  // Precio Unitario
+            addTableCell(table, parts[2]);  // Precio Total
         }
-        document.add(new Paragraph("Total: " + total));
+
+        document.add(table);
+
+        // Total
+        document.add(new Paragraph("Valor Total: $" + total, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+
         document.close();
         return fileName;
+    }
+
+    private void addTableHeader(PdfPTable table, String headerTitle) {
+        PdfPCell header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase(headerTitle));
+        table.addCell(header);
+    }
+
+    private void addTableCell(PdfPTable table, String cellValue) {
+        PdfPCell cell = new PdfPCell();
+        cell.setPhrase(new Phrase(cellValue));
+        table.addCell(cell);
     }
 
     private String generarXML() throws ParserConfigurationException, TransformerException, FileNotFoundException {
@@ -181,13 +226,13 @@ public class facturacion extends JFrame {
     }
 
     private void enviarCorreo(String destinatario, String pdfPath) {
-        String remitente = "jguerralovato@gmail.com";
-        String clave = "swordart1234";
+        String remitente = "guerralovatojosue@hotmail.com";
+        String clave = "swordart12";  // Cambia esto a tu clave de Hotmail
         String asunto = "Factura de compra";
         String mensaje = "Adjunto encontrará la factura de su compra.";
 
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.host", "smtp.office365.com");
         props.put("mail.smtp.user", remitente);
         props.put("mail.smtp.clave", clave);
         props.put("mail.smtp.auth", "true");
@@ -211,7 +256,7 @@ public class facturacion extends JFrame {
             multiParte.addBodyPart(adjunto);
             message.setContent(multiParte);
             Transport transport = session.getTransport("smtp");
-            transport.connect("smtp.gmail.com", remitente, clave);
+            transport.connect("smtp.office365.com", remitente, clave);
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
         } catch (MessagingException me) {
@@ -220,19 +265,18 @@ public class facturacion extends JFrame {
     }
 
     private void guardarEnBaseDeDatos(String pdfPath, String xmlPath) {
-        String query = "INSERT INTO facturas (usuario, cedula, correo, pago, fecha, direccion, metodo_pago, pdf_path, xml_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO facturas (usuario, cedula, correo, fecha, direccion, metodo_pago, pdf_path, xml_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, usuario.getText());
             stmt.setString(2, cedula.getText());
             stmt.setString(3, correo.getText());
-            stmt.setString(4, pago.getText());
-            stmt.setString(5, fecha.getText());
-            stmt.setString(6, direccion.getText());
-            stmt.setString(7, (String) comboBox1.getSelectedItem());
-            stmt.setString(8, pdfPath);
-            stmt.setString(9, xmlPath);
+            stmt.setString(4, fecha.getText());
+            stmt.setString(5, direccion.getText());
+            stmt.setString(6, (String) comboBox1.getSelectedItem());
+            stmt.setString(7, pdfPath);
+            stmt.setString(8, xmlPath);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
