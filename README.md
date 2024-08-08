@@ -1,5 +1,6 @@
 <div style="text-align: center;">
-    <img src="img/logo.jpg" alt="Logo" style="border-radius: 50%; width: 150px; height: 150px;">
+    <img src="img/logo.jpg" alt="Logo" style="border-radius: 50px; width: 150px; height: 150px;">
+    <img src="img/logo.jpg" alt="Logo" style="border-radius: 50px; width: 150px; height: 150px;"> 
 </div>
                 # Hola Mi nombre es Josué! 👋
 ## 🚀 Dentro de este proyecto se mostrara la creación con una 
@@ -8,9 +9,6 @@
 
 # MiniMarket System
 
-<div style="text-align: center;">
-    <img src="img/logo.jpg" alt="Logo" style="border-radius: 50%; width: 150px; height: 150px;">
-</div>
 
 ![Stars](https://img.shields.io/github/stars/pandao/editor.md.svg) ![Forks](https://img.shields.io/github/forks/pandao/editor.md.svg) ![Tag](https://img.shields.io/github/tag/pandao/editor.md.svg) ![Release](https://img.shields.io/github/release/pandao/editor.md.svg) ![Issues](https://img.shields.io/github/issues/pandao/editor.md.svg) ![Bower](https://img.shields.io/bower/v/editor.md.svg)
 
