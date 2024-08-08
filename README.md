@@ -2,12 +2,10 @@
 ## 🚀 Dentro de este proyecto se mostrara la creación con una 
 ## base de datos y el uso de PROGRAMACIÓN ORIENTADA A ONJETOS
 ## Para la creación de una interfaz de un minimarket
-I'm a full stack developer...
-
 ```markdown
 # MiniMarket System
 
-![Logo](https://img/logo.jpg))
+![Logo](img/logo.jpg)
 
 ![Stars](https://img.shields.io/github/stars/pandao/editor.md.svg) ![Forks](https://img.shields.io/github/forks/pandao/editor.md.svg) ![Tag](https://img.shields.io/github/tag/pandao/editor.md.svg) ![Release](https://img.shields.io/github/release/pandao/editor.md.svg) ![Issues](https://img.shields.io/github/issues/pandao/editor.md.svg) ![Bower](https://img.shields.io/bower/v/editor.md.svg)
 
@@ -362,7 +360,7 @@ public class DatabaseConnection {
     /**
      * Obtiene una conexión a la base de datos.
      *
-     * @return la conexión a la base de datos
+     * @return una conexión a la base de datos
      * @throws SQLException si ocurre un error al conectar a la base de datos
      */
     public static Connection getConnection() throws SQLException {
@@ -379,12 +377,11 @@ package miniMarket.interfaz;
 import miniMarket.interfaz.clases.DatabaseConnection;
 import miniMarket.interfaz.clases.Usuario;
 import miniMarket.interfaz.admin.actividad;
-
-
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event
+
+.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -649,10 +646,10 @@ public class facturacion extends JFrame {
      * @throws DocumentException si ocurre un error al crear el documento PDF
      * @throws IOException si ocurre un error al escribir el archivo PDF
      */
-    private
+    private String generarPDF(double total) throws DocumentException, IOException {
+        Document document
 
- String generarPDF(double total) throws DocumentException, IOException {
-        Document document = new Document();
+ = new Document();
         String fileName = "src/facturas/Factura_" + UUID.randomUUID() + ".pdf";
         PdfWriter.getInstance(document, new FileOutputStream(fileName));
         document.open();
@@ -848,10 +845,10 @@ public class facturacion extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             facturacion frame = new facturacion(new ArrayList<>(), 0.0);
-            frame
+            frame.setContentPane(frame.mainPanel4);
+            frame.setDefaultCloseOperation(JFrame
 
-.setContentPane(frame.mainPanel4);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+.EXIT_ON_CLOSE);
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
@@ -864,15 +861,75 @@ public class facturacion extends JFrame {
 
 ### Pantalla de Login
 
-![Pantalla de Login](ruta/a/imagen/login.png)
+![Pantalla de Login](img/login.jpg)
 
 ### Pantalla de Gestión de Productos
 
-![Pantalla de Gestión de Productos](ruta/a/imagen/gestion_productos.png)
+![Pantalla de Gestión de Productos](img/gestion_productos.jpg)
 
 ### Pantalla de Facturación
 
-![Pantalla de Facturación](ruta/a/imagen/facturacion.png)
+![Pantalla de Facturación](img/facturacion.jpg)
+
+### Pantalla de Actividad Admin
+
+![Pantalla de Actividad Admin](img/actividad_admin.jpg)
+
+### Pantalla de Añadir Stock
+
+![Pantalla de Añadir Stock](img/añadir_stock.jpg)
+
+### Pantalla de Compra
+
+![Pantalla de Compra](img/compra.jpg)
+
+### Compra Realizada
+
+![Compra Realizada](img/compra_realizada.jpg)
+
+### Confirmación
+
+![Confirmación](img/confirmacion.jpg)
+
+### Datos de Factura
+
+![Datos de Factura](img/datos_factura.jpg)
+
+### Envío de Credenciales
+
+![Envío de Credenciales](img/envio_credenciales.jpg)
+
+### Login de Admin
+
+![Login de Admin](img/login_admin.jpg)
+
+### Logueo de Cajero
+
+![Logueo de Cajero](img/logueo_cajero.jpg)
+
+### Mensaje de Correo
+
+![Mensaje de Correo](img/mensaje_correo.jpg)
+
+### PDF
+
+![PDF](img/pdf.jpg)
+
+### Recepción de Correo
+
+![Recepción de Correo](img/recepción_correo.jpg)
+
+### Revisión de Ventas
+
+![Revisión de Ventas](img/revisionventas.jpg)
+
+### Stock Actualizado
+
+![Stock Actualizado](img/stock_actualizado.jpg)
+
+### XML
+
+![XML](img/xml.jpg)
 
 ## Cómo Ejecutar
 
@@ -901,4 +958,3 @@ Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 
 Este proyecto está licenciado bajo la Licencia MIT. Para más detalles, consulta el archivo [LICENSE](LICENSE).
 ```
-
