@@ -1,6 +1,3 @@
-<div style="display: flex; justify-content: center; align-items: center; height: 150px;">
-    <img src="img/logo.jpg" alt="Logo" style="border-radius: 50%; width: 150px; height: 150px;">
-</div>
 
                 # Hola Mi nombre es Josué! 👋
 ## 🚀 Dentro de este proyecto se mostrara la creación con una base de datos y el uso de PROGRAMACIÓN ORIENTADA A OBJETOS Para la creación de una interfaz de un minimarket
