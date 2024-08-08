@@ -5,7 +5,8 @@
 # MiniMarket System
 
 
-![Stars](https://img.shields.io/github/stars/pandao/editor.md.svg) ![Forks](https://img.shields.io/github/forks/pandao/editor.md.svg) ![Tag](https://img.shields.io/github/tag/pandao/editor.md.svg) ![Release](https://img.shields.io/github/release/pandao/editor.md.svg) ![Issues](https://img.shields.io/github/issues/pandao/editor.md.svg) ![Bower](https://img.shields.io/bower/v/editor.md.svg)
+![Stars](https://img.shields.io/github/stars/pandao/editor.md.svg) ![Forks](https://img.shields.io/github/forks/pandao/editor.md.svg) ![Tag](https://img.shields.io/github/tag/pandao/editor.md.svg) ![Release](https://img.shields.io/github/release/pandao/editor.md.svg) ![Issues](https://img.shields.io/github/issues/pandao/editor.md.svg) ![Bower](https://img.shields.io/bower/v/editor.md.svg
+)
 
 ## Descripción
 
@@ -13,7 +14,7 @@ Este es un sistema de gestión para un miniMarket, desarrollado en Java. A conti
 
 ## Índice
 
-- [Video Guía](#Video)
+- [Video Guía](#Video-del-funcionamiento)
 - [Clase Producto](#clase-producto)
 - [Clase Role](#clase-role)
 - [Clase Usuario](#clase-usuario)
@@ -25,6 +26,12 @@ Este es un sistema de gestión para un miniMarket, desarrollado en Java. A conti
 - [Cómo Ejecutar](#cómo-ejecutar)
 - [Contribución](#contribución)
 - [Licencia](#licencia)
+### Video
+## Video del Funcionamiento
+
+<div style="text-align: center;">
+   <iframe width="560" height="315" src="https://www.youtube.com/embed/GzjfzVOFjGY?si=5mmAGXn-Vi4t64Ys" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
 
 ## Clases Principales
 ### Clase Producto
