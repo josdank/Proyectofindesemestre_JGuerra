@@ -16,6 +16,7 @@ Este es un sistema de gestión para un miniMarket, desarrollado en Java. A conti
 
 ## Índice
 
+- [Video Guía](#Video)
 - [Clase Producto](#clase-producto)
 - [Clase Role](#clase-role)
 - [Clase Usuario](#clase-usuario)
@@ -861,67 +862,99 @@ public class facturacion extends JFrame {
 
 ### Pantalla de Login
 
-<img src="img/login.jpg" alt="Pantalla de Login" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/login.jpg" alt="Pantalla de Login" style="width: 250px; height: 250px;">
+</div>
 
 ### Pantalla de Actividad Admin
 
-<img src="img/actividad_admin.jpg" alt="Pantalla de Actividad Admin" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/actividad_admin.jpg" alt="Pantalla de Actividad Admin" style="width: 250px; height: 250px;">
+</div>
 
 ### Pantalla de Añadir Stock
 
-<img src="img/añadir_stock.jpg" alt="Pantalla de Añadir Stock" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/añadir_stock.jpg" alt="Pantalla de Añadir Stock" style="width: 250px; height: 250px;">
+</div>
 
 ### Pantalla de Compra
 
-<img src="img/compra.jpg" alt="Pantalla de Compra" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/compra.jpg" alt="Pantalla de Compra" style="width: 250px; height: 250px;">
+</div>
 
 ### Compra Realizada
 
-<img src="img/compra_realizada.jpg" alt="Compra Realizada" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/compra_realizada.jpg" alt="Compra Realizada" style="width: 250px; height: 250px;">
+</div>
 
 ### Confirmación
 
-<img src="img/confirmacion.jpg" alt="Confirmación" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/confirmacion.jpg" alt="Confirmación" style="width: 250px; height: 250px;">
+</div>
 
 ### Datos de Factura
 
-<img src="img/datos_factura.jpg" alt="Datos de Factura" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/datos_factura.jpg" alt="Datos de Factura" style="width: 250px; height: 250px;">
+</div>
 
 ### Envío de Credenciales
 
-<img src="img/envio_credenciales.jpg" alt="Envío de Credenciales" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/envio_credenciales.jpg" alt="Envío de Credenciales" style="width: 250px; height: 250px;">
+</div>
 
 ### Login de Admin
 
-<img src="img/login_admin.jpg" alt="Login de Admin" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/login_admin.jpg" alt="Login de Admin" style="width: 250px; height: 250px;">
+</div>
 
 ### Logueo de Cajero
 
-<img src="img/logueo_cajero.jpg" alt="Logueo de Cajero" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/logueo_cajero.jpg" alt="Logueo de Cajero" style="width: 250px; height: 250px;">
+</div>
 
 ### Mensaje de Correo
 
-<img src="img/mensaje_correo.jpg" alt="Mensaje de Correo" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/mensaje_correo.jpg" alt="Mensaje de Correo" style="width: 250px; height: 250px;">
+</div>
 
 ### PDF
 
-<img src="img/pdf.jpg" alt="PDF" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/pdf.jpg" alt="PDF" style="width: 250px; height: 250px;">
+</div>
 
 ### Recepción de Correo
 
-<img src="img/recepción_correo.jpg" alt="Recepción de Correo" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/recepción_correo.jpg" alt="Recepción de Correo" style="width: 250px; height: 250px;">
+</div>
 
 ### Revisión de Ventas
 
-<img src="img/revisionventas.jpg" alt="Revisión de Ventas" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/revisionventas.jpg" alt="Revisión de Ventas" style="width: 250px; height: 250px;">
+</div>
 
 ### Stock Actualizado
 
-<img src="img/stock_actualizado.jpg" alt="Stock Actualizado" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/stock_actualizado.jpg" alt="Stock Actualizado" style="width: 250px; height: 250px;">
+</div>
 
 ### XML
 
-<img src="img/xml.jpg" alt="XML" style="width: 120px; height: 120px;">
+<div style="display: flex; justify-content: center;">
+    <img src="img/xml.jpg" alt="XML" style="width: 250px; height: 250px;">
+</div>
 
 
 ## Cómo Ejecutar
