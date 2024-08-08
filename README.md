@@ -2,7 +2,7 @@
 ## 🚀 Dentro de este proyecto se mostrara la creación con una 
 ## base de datos y el uso de PROGRAMACIÓN ORIENTADA A ONJETOS
 ## Para la creación de una interfaz de un minimarket
-```markdown
+
 # MiniMarket System
 
 ![Logo](img/logo.jpg)
@@ -28,7 +28,6 @@ Este es un sistema de gestión para un miniMarket, desarrollado en Java. A conti
 - [Licencia](#licencia)
 
 ## Clases Principales
-
 ### Clase Producto
 
 ```java
