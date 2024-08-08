@@ -54,7 +54,7 @@ CREATE TABLE facturas (
     direccion VARCHAR(255) NOT NULL,
     metodo_pago VARCHAR(50) NOT NULL
 );
-select*from facturas;
+select*from ventas;
 ALTER TABLE facturas DROP COLUMN pago;
 ALTER TABLE facturas
 ADD COLUMN pdf_path VARCHAR(255),
@@ -66,10 +66,10 @@ CREATE TABLE stock (
     cantidad INT NOT NULL DEFAULT 100
 );
 ALTER TABLE stock ADD COLUMN precio DECIMAL(10, 2) NOT NULL;
-select * from stock;
-TRUNCATE TABLE usuarios;
+select * from usuarios;
+TRUNCATE TABLE stock;
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM usuarios;
+DELETE FROM stock;
 SET SQL_SAFE_UPDATES = 1;
 
 
