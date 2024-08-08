@@ -1,12 +1,13 @@
-# HOla Mi nombre es Josué! 👋
-## 🚀 Dentro de este proyecto se mostrara la creación con una base de datos y el uso de PROGRAMACIÓN ORIENTADA A ONJETOS
+                # Hola Mi nombre es Josué! 👋
+## 🚀 Dentro de este proyecto se mostrara la creación con una 
+## base de datos y el uso de PROGRAMACIÓN ORIENTADA A ONJETOS
 ## Para la creación de una interfaz de un minimarket
 I'm a full stack developer...
 
 ```markdown
 # MiniMarket System
 
-![Logo](imagenes/logo.jpg180x18)
+![Logo](https://img/logo.jpg))
 
 ![Stars](https://img.shields.io/github/stars/pandao/editor.md.svg) ![Forks](https://img.shields.io/github/forks/pandao/editor.md.svg) ![Tag](https://img.shields.io/github/tag/pandao/editor.md.svg) ![Release](https://img.shields.io/github/release/pandao/editor.md.svg) ![Issues](https://img.shields.io/github/issues/pandao/editor.md.svg) ![Bower](https://img.shields.io/bower/v/editor.md.svg)
 
