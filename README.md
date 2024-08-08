@@ -863,14 +863,6 @@ public class facturacion extends JFrame {
 
 ![Pantalla de Login](img/login.jpg)
 
-### Pantalla de Gestión de Productos
-
-![Pantalla de Gestión de Productos](img/gestion_productos.jpg)
-
-### Pantalla de Facturación
-
-![Pantalla de Facturación](img/facturacion.jpg)
-
 ### Pantalla de Actividad Admin
 
 ![Pantalla de Actividad Admin](img/actividad_admin.jpg)
