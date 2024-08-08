@@ -29,7 +29,7 @@ Este es un sistema de gestión para un miniMarket, desarrollado en Java. A conti
 ## Video del Funcionamiento
 
 <div style="text-align: center;">
-    <iframe width="560" height="315" src="https://youtu.be/GzjfzVOFjGY?si=s1nKcly2h6IzpA1s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/i_XntgYq5m8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 
