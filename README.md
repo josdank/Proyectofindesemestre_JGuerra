@@ -863,99 +863,98 @@ public class facturacion extends JFrame {
 ### Pantalla de Login
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/login.jpg" alt="Pantalla de Login" style="width: 250px; height: 250px;">
+    <img src="img/login.jpg" alt="Pantalla de Login" style="width: 250px; height: auto;">
 </div>
 
 ### Pantalla de Actividad Admin
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/actividad_admin.jpg" alt="Pantalla de Actividad Admin" style="width: 250px; height: 250px;">
+    <img src="img/actividad_admin.jpg" alt="Pantalla de Actividad Admin" style="width: 250px; height: auto;">
 </div>
 
 ### Pantalla de Añadir Stock
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/añadir_stock.jpg" alt="Pantalla de Añadir Stock" style="width: 250px; height: 250px;">
+    <img src="img/añadir_stock.jpg" alt="Pantalla de Añadir Stock" style="width: 250px; height: auto;">
 </div>
 
 ### Pantalla de Compra
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/compra.jpg" alt="Pantalla de Compra" style="width: 250px; height: 250px;">
+    <img src="img/compra.jpg" alt="Pantalla de Compra" style="width: 250px; height: auto;">
 </div>
 
 ### Compra Realizada
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/compra_realizada.jpg" alt="Compra Realizada" style="width: 250px; height: 250px;">
+    <img src="img/compra_realizada.jpg" alt="Compra Realizada" style="width: 250px; height: auto;">
 </div>
 
 ### Confirmación
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/confirmacion.jpg" alt="Confirmación" style="width: 250px; height: 250px;">
+    <img src="img/confirmacion.jpg" alt="Confirmación" style="width: 250px; height: auto;">
 </div>
 
 ### Datos de Factura
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/datos_factura.jpg" alt="Datos de Factura" style="width: 250px; height: 250px;">
+    <img src="img/datos_factura.jpg" alt="Datos de Factura" style="width: 250px; height: auto;">
 </div>
 
 ### Envío de Credenciales
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/envio_credenciales.jpg" alt="Envío de Credenciales" style="width: 250px; height: 250px;">
+    <img src="img/envio_credenciales.jpg" alt="Envío de Credenciales" style="width: 250px; height: auto;">
 </div>
 
 ### Login de Admin
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/login_admin.jpg" alt="Login de Admin" style="width: 250px; height: 250px;">
+    <img src="img/login_admin.jpg" alt="Login de Admin" style="width: 250px; height: auto;">
 </div>
 
 ### Logueo de Cajero
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/logueo_cajero.jpg" alt="Logueo de Cajero" style="width: 250px; height: 250px;">
+    <img src="img/logueo_cajero.jpg" alt="Logueo de Cajero" style="width: 250px; height: auto;">
 </div>
 
 ### Mensaje de Correo
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/mensaje_correo.jpg" alt="Mensaje de Correo" style="width: 250px; height: 250px;">
+    <img src="img/mensaje_correo.jpg" alt="Mensaje de Correo" style="width: 250px; height: auto;">
 </div>
 
 ### PDF
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/pdf.jpg" alt="PDF" style="width: 250px; height: 250px;">
+    <img src="img/pdf.jpg" alt="PDF" style="width: 250px; height: auto;">
 </div>
 
 ### Recepción de Correo
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/recepción_correo.jpg" alt="Recepción de Correo" style="width: 250px; height: 250px;">
+    <img src="img/recepción_correo.jpg" alt="Recepción de Correo" style="width: 250px; height: auto;">
 </div>
 
 ### Revisión de Ventas
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/revisionventas.jpg" alt="Revisión de Ventas" style="width: 250px; height: 250px;">
+    <img src="img/revisionventas.jpg" alt="Revisión de Ventas" style="width: 250px; height: auto;">
 </div>
 
 ### Stock Actualizado
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/stock_actualizado.jpg" alt="Stock Actualizado" style="width: 250px; height: 250px;">
+    <img src="img/stock_actualizado.jpg" alt="Stock Actualizado" style="width: 250px; height: auto;">
 </div>
 
 ### XML
 
 <div style="display: flex; justify-content: center;">
-    <img src="img/xml.jpg" alt="XML" style="width: 250px; height: 250px;">
+    <img src="img/xml.jpg" alt="XML" style="width: 250px; height: auto;">
 </div>
-
 
 ## Cómo Ejecutar
 
