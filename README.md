@@ -861,67 +861,68 @@ public class facturacion extends JFrame {
 
 ### Pantalla de Login
 
-![Pantalla de Login](img/login.jpg)
+<img src="img/login.jpg" alt="Pantalla de Login" style="width: 120px; height: 120px;">
 
 ### Pantalla de Actividad Admin
 
-![Pantalla de Actividad Admin](img/actividad_admin.jpg)
+<img src="img/actividad_admin.jpg" alt="Pantalla de Actividad Admin" style="width: 120px; height: 120px;">
 
 ### Pantalla de Añadir Stock
 
-![Pantalla de Añadir Stock](img/añadir_stock.jpg)
+<img src="img/añadir_stock.jpg" alt="Pantalla de Añadir Stock" style="width: 120px; height: 120px;">
 
 ### Pantalla de Compra
 
-![Pantalla de Compra](img/compra.jpg)
+<img src="img/compra.jpg" alt="Pantalla de Compra" style="width: 120px; height: 120px;">
 
 ### Compra Realizada
 
-![Compra Realizada](img/compra_realizada.jpg)
+<img src="img/compra_realizada.jpg" alt="Compra Realizada" style="width: 120px; height: 120px;">
 
 ### Confirmación
 
-![Confirmación](img/confirmacion.jpg)
+<img src="img/confirmacion.jpg" alt="Confirmación" style="width: 120px; height: 120px;">
 
 ### Datos de Factura
 
-![Datos de Factura](img/datos_factura.jpg)
+<img src="img/datos_factura.jpg" alt="Datos de Factura" style="width: 120px; height: 120px;">
 
 ### Envío de Credenciales
 
-![Envío de Credenciales](img/envio_credenciales.jpg)
+<img src="img/envio_credenciales.jpg" alt="Envío de Credenciales" style="width: 120px; height: 120px;">
 
 ### Login de Admin
 
-![Login de Admin](img/login_admin.jpg)
+<img src="img/login_admin.jpg" alt="Login de Admin" style="width: 120px; height: 120px;">
 
 ### Logueo de Cajero
 
-![Logueo de Cajero](img/logueo_cajero.jpg)
+<img src="img/logueo_cajero.jpg" alt="Logueo de Cajero" style="width: 120px; height: 120px;">
 
 ### Mensaje de Correo
 
-![Mensaje de Correo](img/mensaje_correo.jpg)
+<img src="img/mensaje_correo.jpg" alt="Mensaje de Correo" style="width: 120px; height: 120px;">
 
 ### PDF
 
-![PDF](img/pdf.jpg)
+<img src="img/pdf.jpg" alt="PDF" style="width: 120px; height: 120px;">
 
 ### Recepción de Correo
 
-![Recepción de Correo](img/recepción_correo.jpg)
+<img src="img/recepción_correo.jpg" alt="Recepción de Correo" style="width: 120px; height: 120px;">
 
 ### Revisión de Ventas
 
-![Revisión de Ventas](img/revisionventas.jpg)
+<img src="img/revisionventas.jpg" alt="Revisión de Ventas" style="width: 120px; height: 120px;">
 
 ### Stock Actualizado
 
-![Stock Actualizado](img/stock_actualizado.jpg)
+<img src="img/stock_actualizado.jpg" alt="Stock Actualizado" style="width: 120px; height: 120px;">
 
 ### XML
 
-![XML](img/xml.jpg)
+<img src="img/xml.jpg" alt="XML" style="width: 120px; height: 120px;">
+
 
 ## Cómo Ejecutar
 
